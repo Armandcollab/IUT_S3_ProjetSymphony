@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Series index
+{% endblock %}
+
+{% block body %}
+	<h1>Series index</h1>
+    {% if id > 0 %}
+
+		<a href="{{ path('series_pages', {'id': id - 1}) }}"><<</a> /
+    {% endif %}
+    
+    {% if id/10 < series|length - 1 %}
+    
+        <a href="{{path('series_pages',{'id':id+1})}}">>></a>
+    {% endif %}
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Title</th>
+				<th>Plot</th>
+				<th>Imdb</th>
+				<th>YoutubeTrailer</th>
+				<th>Awards</th>
+				<th>YearStart</th>
+				<th>YearEnd</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for series in series %}
+				<tr>
+					<td>{{ series.id }}</td>
+					<td>{{ series.title }}</td>
+					<td>{{ series.plot }}</td>
+					<td>{{ series.imdb }}</td>
+					<td>{{ series.youtubeTrailer }}</td>
+					<td>{{ series.awards }}</td>
+					<td>{{ series.yearStart }}</td>
+					<td>{{ series.yearEnd }}</td>
+					<td>
+						<a href="{{ path('series_show', {'id': series.id}) }}">show</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="11">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}
