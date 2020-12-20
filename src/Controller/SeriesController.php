@@ -34,16 +34,29 @@ class SeriesController extends AbstractController
      */
     public function show(Series $series): Response
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $id = $series->getId();
+
+        $query = $em->createQuery("SELECT s 
+        FROM App:Season s
+        INNER JOIN App:Series ss WITH s.series = ss.id
+        WHERE s.series = $id
+        ORDER BY s.number");
+
+        $seasons = $query->getResult();
+
         return $this->render('series/show.html.twig', [
             'series' => $series,
+            'seasons' => $seasons
         ]);
     }
 
     /**
      * @Route("/poster/{id}", name="series_poster", methods={"GET"})
      */
-    public function getPoster(Series $series, Int $id): Response
+    public function getPoster(Series $series): Response
     {
-        return new Response(stream_get_contents($series->getposter()));
+        return new Response(stream_get_contents($series->getPoster()),200,['content-type' => 'image/jpeg']);
     }
 }
