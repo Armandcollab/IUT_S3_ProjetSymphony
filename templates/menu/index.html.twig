@@ -1,0 +1,63 @@
+{#{% extends 'base.html.twig' %}#}
+
+<head>
+	<title>Menu</title>
+
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="example-wrapper">
+		<h1>Bienvenue</h1>
+
+		<ul>
+			<li>
+				<code>
+					<a href="{{ path('series_index') }}">Series</a>
+				</code>
+			</li>
+			<li>
+				<code>
+					<a href="{{ path('series_followed') }}">
+						Series suivies
+					</a>
+				</code>
+			</li>
+			{% if app.user %}
+				<li>
+					<code>
+						<a href="{{ path('app_logout')}}">
+							Déconnexion
+						</a>
+					</code>
+				</li>
+			{% else %}
+				<li>
+					<code>
+						<a href="{{ path('app_register') }}">
+							Inscription
+						</a>
+					</code>
+				</li>
+				<li>
+					<code>
+						<a href="{{ path('app_login') }}">
+							Connexion
+						</a>
+					</code>
+				</li>
+			{% endif %}
+		</ul>
+	</div>
+</body>

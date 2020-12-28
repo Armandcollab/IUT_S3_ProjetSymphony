@@ -53,13 +53,24 @@
 				<td>
 					<ul>
 						{% for season in seasons %}
-							<li>Season {{season.number}}</li>
+							<li>Season
+								{{season.number}}</li>
 						{% endfor %}
 					</ul>
 				</td>
 			</tr>
+			<tr>
+				<th>Suivie</th>
+				<td>
+					{% if suivie %}
+					<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
+						✅
+					</a>
+				{% else %}
+					<a href="{{ path('series_follow', {'id' : series.id } ) }}">❌
+					</a>
+				{% endif %}
+			</tr>
 		</tbody>
-	</table>
-
-	<a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>
-{% endblock %}
+	</td>
+</tr></tbody></table><a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>{% endblock %}

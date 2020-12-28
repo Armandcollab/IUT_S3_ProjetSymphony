@@ -7,12 +7,12 @@
 	<h1>Series index</h1>
     {% if id > 0 %}
 
-		<a href="{{ path('series_pages', {'id': id - 1}) }}"><<</a> /
+		<a href="{{ path(page, {'id': id - 1}) }}"><<</a> /
     {% endif %}
     
     {% if id/10 < series|length - 1 %}
     
-        <a href="{{path('series_pages',{'id':id+1})}}">>></a>
+        <a href="{{path(page,{'id':id+1})}}">>></a>
     {% endif %}
 
 	<table class="table">
