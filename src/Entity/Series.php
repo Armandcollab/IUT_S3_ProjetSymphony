@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Series
  *
  * @ORM\Table(name="series", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_3A10012D85489131", columns={"imdb"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\SearchRepository")
  */
 class Series
 {

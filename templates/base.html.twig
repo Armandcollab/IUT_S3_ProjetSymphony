@@ -1,26 +1,39 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        <a href="{{ path('home') }}"> Accueil </a>
-        -
-        <a href="{{ path('series_index') }}"> Series </a>
-        -
-        <a href="{{ path('series_followed') }}"> Series Suivies</a>
-        -
-        {% if app.user %}
-        [{{ app.user.name}} , {{app.user.country}}]
-        <a href="{{ path('app_logout')}}"> Déconnexion </a>
-        {% else %}
-        <a href="{{ path('app_register') }}"> Inscription </a>
-        - 
-        <a href="{{ path('app_login') }}"> Connexion </a>
-        {% endif %}
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@0.5.3/dist/css/axentix.min.css"> {% block stylesheets %}{% endblock %}
+		<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+	</head>
+	<body>
+
+		<header>
+			<nav class="navbar primary">
+				<a href="{{ path('home') }}" class="navbar-icon"><img src="{{ asset('icons/logo.png') }}" alt="Logo" class="image"></a>
+				<a href="{{ path('home') }}" class="navbar-brand">Les meilleurs séries du net</a>
+				<div class="navbar-menu ml-auto">
+					<a class="navbar-link" href="{{ path('home') }}">Accueil</a>
+					<a class="navbar-link" href="{{ path('series_index') }}">Series</a>
+					{% if app.user %}
+						<a class="navbar-link" href="{{ path('series_followed') }}">Series suivies</a>
+						<a class="navbar-link" href="{{ path('app_logout')}}">Déconnexion</a>
+					{% else %}
+						<a class="navbar-link" href="{{ path('app_register') }}">Inscription</a>
+						<a class="navbar-link" href="{{ path('app_login') }}">Connexion</a>
+					{% endif %}
+				</div>
+			</nav>
+		</header>
+
+		<script src="https://cdn.jsdelivr.net/npm/axentix@0.5.3/dist/js/axentix.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		{% block body %}{% endblock %}
+		{% block javascripts %}{% endblock %}
+		<script src="{{ asset('js/main.js') }}"></script>
+	</body>
 </html>

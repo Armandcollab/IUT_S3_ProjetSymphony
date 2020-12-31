@@ -1,55 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Series index
+{% block title %}Liste des séries
 {% endblock %}
 
 {% block body %}
-	<h1>Series index</h1>
-    {% if id > 0 %}
+<h1>Consulter l'ensemble des séries</h1>
 
+<nav class="searchform">
+	<p>
+		<b>Recherche par titre</b>
+	</p>
+	{{ form_start(form) }}
+	{{ form_widget(form.title) }}
+
+	{# other fields... #}
+	{{ form_end(form) }}
+</nav>
+
+ {% if id > 0 %}
 		<a href="{{ path(page, {'id': id - 1}) }}"><<</a> /
     {% endif %}
-    
+
     {% if id/10 < series|length - 1 %}
-    
         <a href="{{path(page,{'id':id+1})}}">>></a>
     {% endif %}
+{% for series in series %}
+	<div class="serie">
+		<header class="serie title">
+			{{ series.title }}
+		</header>
+		<div class="serie poster">*
+			<td><img src="{{path('series_poster', {'id': series.id} ) }}" alt="poster"></td>
+		</div>
+		<section class="serie description">
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Title</th>
-				<th>Plot</th>
-				<th>Imdb</th>
-				<th>YoutubeTrailer</th>
-				<th>Awards</th>
-				<th>YearStart</th>
-				<th>YearEnd</th>
-				<th>actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for series in series %}
-				<tr>
-					<td>{{ series.id }}</td>
-					<td>{{ series.title }}</td>
-					<td>{{ series.plot }}</td>
-					<td>{{ series.imdb }}</td>
-					<td>{{ series.youtubeTrailer }}</td>
-					<td>{{ series.awards }}</td>
-					<td>{{ series.yearStart }}</td>
-					<td>{{ series.yearEnd }}</td>
-					<td>
-						<a href="{{ path('series_show', {'id': series.id}) }}">show</a>
-					</td>
-				</tr>
-			{% else %}
-				<tr>
-					<td colspan="11">no records found</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+			<div class="serie plot">
+				<h5>Histoire</h5>
+				<p>{{ series.plot }}</p>
+			</div>
+			<div class="serie details">
+				<ul>
+					<li>
+						<p>Année de lancement : {{ series.yearStart }}</p>
+					</li>
+					<li>
+						<p>Année de fin : {{ series.yearEnd }}</p>
+					</li>
+					<li>
+						<p>Prix : {{ series.awards }}</p>
+					</li>
+				</ul>
+			</div>
 
-{% endblock %}
+		</section>
+
+		<a href="{{ path('series_show', {'id': series.id}) }}">Plus de détails</a>
+
+	</div>
+{% else %}
+	<p>Error : no records found</p>
+</tr>{% endfor %}{% block footer %}
+<footer class="footer primary">
+	Copyright © 2020
+</footer>{% endblock %}{% endblock %}

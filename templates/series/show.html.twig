@@ -34,7 +34,9 @@
 			</tr>
 			<tr>
 				<th>YoutubeTrailer</th>
-				<td>{{ series.youtubeTrailer }}</td>
+				<td>
+					<iframe width="420" height="345" src="https://www.youtube.com/embed/{{ytbcode}}?autoplay=1&mute=1"></iframe>
+				</td>
 			</tr>
 			<tr>
 				<th>Awards</th>
@@ -51,10 +53,15 @@
 			<tr>
 				<th>Seasons</th>
 				<td>
+					<button class="season_nav">Consulter l'ensemble des épisodes</button>
 					<ul>
 						{% for season in seasons %}
-							<li>Season
+							<li >Season
 								{{season.number}}</li>
+							<div class="episodes">
+								<p>TEST</p>
+							</div>
+
 						{% endfor %}
 					</ul>
 				</td>
@@ -63,13 +70,14 @@
 				<th>Suivie</th>
 				<td>
 					{% if suivie %}
-					<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
-						✅
-					</a>
-				{% else %}
-					<a href="{{ path('series_follow', {'id' : series.id } ) }}">❌
-					</a>
-				{% endif %}
+						<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
+							✅
+						</a>
+					{% else %}
+						<a href="{{ path('series_follow', {'id' : series.id } ) }}">❌
+						</a>
+					{% endif %}
+				</td>
 			</tr>
 		</tbody>
 	</td>

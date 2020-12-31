@@ -1,4 +1,4 @@
-{#{% extends 'base.html.twig' %}#}
+
 
 <head>
 	<title>Menu</title>
@@ -29,16 +29,22 @@
 			</li>
 			<li>
 				<code>
-					<a href="{{ path('series_followed') }}">
-						Series suivies
-					</a>
+					<a href="{{ asset('other/apropos.html') }}">À propos</a>
 				</code>
 			</li>
+
 			{% if app.user %}
 				<li>
 					<code>
 						<a href="{{ path('app_logout')}}">
 							Déconnexion
+						</a>
+					</code>
+				</li>
+				<li>
+					<code>
+						<a href="{{ path('series_followed') }}">
+							Series suivies
 						</a>
 					</code>
 				</li>
