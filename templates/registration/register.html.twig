@@ -1,23 +1,56 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Formulaire d'inscription
+{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
+	{% for flashError in app.flashes('verify_email_error') %}
+		<div class="alert alert-danger" role="alert">{{ flashError }}</div>
+	{% endfor %}
 
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.name) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.country) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+	<section class="registration-form">
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+		<div class="container">
+			<h1>Formulaire d'inscription</h1>
+			<p>Veuillez remplir ce formulaire pour créer un compte.</p>
+
+			{{ form_start(registrationForm) }}
+			<label for="name">
+				<b>Prénom</b>
+			</label>
+			{{ form_widget(registrationForm.name)}}
+			<label for="email">
+				<b>Email</b>
+			</label>
+			{{ form_widget(registrationForm.email) }}
+			<label for="psw">
+				<b>Mot de passe</b>
+			</label>
+			{{ form_widget(registrationForm.plainPassword) }}
+			<label for="cntry">
+				<b>Pays</b>
+			</label>
+			{{ form_widget(registrationForm.country) }}
+			<p>En créant un compte, vous acceptez nos
+				<a href="#">Conditions et confidentialité</a>.</p>
+			{{ form_widget(registrationForm.agreeTerms) }}
+            <br>
+            <label for="captcha">
+				<b>Veuillez remplir le captcha ci dessous</b>
+			</label>
+            <br><br>
+			{{ form_widget(registrationForm.captcha) }}
+		</div>
+
+		<div class="container signin">
+			<p>Vous avez déjà un compte ?
+				<a href="{{ path('app_login') }}">Connectez-vous ici</a>.</p>
+			<button type="submit" class="btn registerbtn">S'inscrire</button>
+		</div>
+
+
+		{{ form_end(registrationForm) }}
+	</section>
 {% endblock %}
+{% block footer %}{% endblock %}

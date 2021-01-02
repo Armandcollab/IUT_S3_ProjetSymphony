@@ -15,7 +15,13 @@ class SearchBarFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title');
+            ->add('title')
+            ->add('filters', CheckboxType::class, [
+                'label' => 'Filtres avancées',
+                'required' => false,
+                'mapped' => false,
+                'attr' => ['onclick' => 'filterSettingChecked()']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

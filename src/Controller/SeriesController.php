@@ -82,7 +82,6 @@ class SeriesController extends AbstractController
     public function series($series, Int $id, $pages, Request $request): Response
     {
         $form = $this->createForm(SearchBarFormType::class);
-        $em = $this->getDoctrine()->getManager();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             (array)$series = $this->getDoctrine()

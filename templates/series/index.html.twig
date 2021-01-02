@@ -4,62 +4,105 @@
 {% endblock %}
 
 {% block body %}
-<h1>Consulter l'ensemble des séries</h1>
+
 
 <nav class="searchform">
+	<h1>Consulter l'ensemble des séries</h1>
 	<p>
 		<b>Recherche par titre</b>
 	</p>
+
 	{{ form_start(form) }}
 	{{ form_widget(form.title) }}
+	<b>Filtres :</b>
+	{{ form_widget(form.filters) }}
+	<br>
+	<br>
 
-	{# other fields... #}
 	{{ form_end(form) }}
+
+	<!-- Control buttons -->
+	<div id="myBtnContainer" class="filters-container">
+		<button class="btn active" onclick="filterSelection('all')">
+			<label>Tout voir</label>
+		</button>
+		<button class="btn" onclick="filterSelection('cars')">
+			<label>Cars</label>
+		</button>
+		<button class="btn" onclick="filterSelection('animals')">
+			<label>Animals</label>
+		</button>
+		<button class="btn" onclick="filterSelection('fruits')">
+			<label>Fruits</label>
+		</button>
+		<button class="btn" onclick="filterSelection('colors')">
+			<label>Colors</label>
+		</button>
+	</div>
+
+
+	{% if id > 0 %}
+		<button type="button">
+			<a href="{{ path(page, {'id': id - 1}) }}">Page précédente</a>
+		</button>
+	{% endif %}
+
+	{% if id/10 < series|length - 1 %}
+		<button type="button">
+			<a href="{{path(page,{'id':id+1})}}">Page suivante</a>
+		</button>
+	{% endif %}
+	<p>{{ series|length }}
+		références</p>
 </nav>
 
- {% if id > 0 %}
-		<a href="{{ path(page, {'id': id - 1}) }}"><<</a> /
-    {% endif %}
 
-    {% if id/10 < series|length - 1 %}
-        <a href="{{path(page,{'id':id+1})}}">>></a>
-    {% endif %}
 {% for series in series %}
 	<div class="serie">
-		<header class="serie title">
+		<header class="serie-title">
 			{{ series.title }}
 		</header>
-		<div class="serie poster">*
-			<td><img src="{{path('series_poster', {'id': series.id} ) }}" alt="poster"></td>
+		<div class="serie-content">
+			<div class="serie-poster">*
+				<td><img src="{{path('series_poster', {'id': series.id} ) }}" alt="poster"></td>
+			</div>
+			<article class="serie-description">
+
+				<div class="serie-plot">
+					<h5>Histoire</h5>
+					<p>{{ series.plot }}</p>
+				</div>
+				<div class="serie-details">
+					<ul>
+						<li>
+							<p>Année de lancement :
+								{{ series.yearStart }}</p>
+						</li>
+						<li>
+							<p>Année de fin :
+								{{ series.yearEnd }}</p>
+						</li>
+						<li>
+							<p>Prix :
+								{{ series.awards }}</p>
+						</li>
+						<button type="button" id="seemore">
+							<a href="{{ path('series_show', {'id': series.id}) }}">Plus de détails</a>
+						</button>
+					</ul>
+				</div>
+
+
+			</article>
+
+
 		</div>
-		<section class="serie description">
 
-			<div class="serie plot">
-				<h5>Histoire</h5>
-				<p>{{ series.plot }}</p>
-			</div>
-			<div class="serie details">
-				<ul>
-					<li>
-						<p>Année de lancement : {{ series.yearStart }}</p>
-					</li>
-					<li>
-						<p>Année de fin : {{ series.yearEnd }}</p>
-					</li>
-					<li>
-						<p>Prix : {{ series.awards }}</p>
-					</li>
-				</ul>
-			</div>
-
-		</section>
-
-		<a href="{{ path('series_show', {'id': series.id}) }}">Plus de détails</a>
 
 	</div>
 {% else %}
 	<p>Error : no records found</p>
-</tr>{% endfor %}{% block footer %}
+</tr>{% endfor %}{% block footer   %}
 <footer class="footer primary">
 	Copyright © 2020
 </footer>{% endblock %}{% endblock %}

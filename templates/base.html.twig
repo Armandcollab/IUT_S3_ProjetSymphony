@@ -7,20 +7,26 @@
 			{% endblock %}
 		</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@0.5.3/dist/css/axentix.min.css"> {% block stylesheets %}{% endblock %}
-		<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+		<link rel="stylesheet" href="{{asset('css/styles.css') }}">
 
 	</head>
 	<body>
 
 		<header>
 			<nav class="navbar primary">
-				<a href="{{ path('home') }}" class="navbar-icon"><img src="{{ asset('icons/logo.png') }}" alt="Logo" class="image"></a>
+				<a href="{{ path('home') }}" class="navbar-icon"><img src="{{asset('icons/logo.png') }}" alt="Logo" class="image"></a>
 				<a href="{{ path('home') }}" class="navbar-brand">Les meilleurs séries du net</a>
 				<div class="navbar-menu ml-auto">
 					<a class="navbar-link" href="{{ path('home') }}">Accueil</a>
 					<a class="navbar-link" href="{{ path('series_index') }}">Series</a>
 					{% if app.user %}
 						<a class="navbar-link" href="{{ path('series_followed') }}">Series suivies</a>
+						<img src="{{asset('icons/user_icon.png') }}" alt="User" class="image">
+						<p class="navbar-link">Nom :
+							{{ app.user}}
+						</p>
+						<p class="navbar-link">Pays :
+							{{app.user.country}}</p>
 						<a class="navbar-link" href="{{ path('app_logout')}}">Déconnexion</a>
 					{% else %}
 						<a class="navbar-link" href="{{ path('app_register') }}">Inscription</a>
@@ -32,8 +38,11 @@
 
 		<script src="https://cdn.jsdelivr.net/npm/axentix@0.5.3/dist/js/axentix.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+		<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onGoogleReCaptchaApiLoad&render=explicit&hl={{ app.request.locale }}" async defer></script>
 		{% block body %}{% endblock %}
 		{% block javascripts %}{% endblock %}
 		<script src="{{ asset('js/main.js') }}"></script>
+
 	</body>
 </html>
