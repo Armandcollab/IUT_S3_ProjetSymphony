@@ -10,6 +10,7 @@
 	{% if app.user and app.request.get('_route') == 'series_followed'%}
 
 		<h1>Voici les séries que vous suivez !</h1>
+<<<<<<< HEAD
 	{% else %}
 		<h1>Consulter l'ensemble des séries</h1>
 	{% endif %}
@@ -17,13 +18,26 @@
 		<b>Recherche par titre</b>
 	</p>
 
+=======
+
+	{% endif %}
+	<h1>Consulter l'ensemble des séries</h1>
+
+	<p>
+		<b>Recherche par titre</b>
+	</p>
+
+>>>>>>> 2f867cefca2d22418dbbd3ed74e5c95d6087a0e4
 	{{ form_start(form) }}
 	{{ form_widget(form.title) }}
 	<b>Filtres :</b>
 	{{ form_widget(form.filters) }}
 	<br>
 	<br>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2f867cefca2d22418dbbd3ed74e5c95d6087a0e4
 
 	<!-- Control buttons -->
 	<div id="myBtnContainer" class="filters-container">
@@ -36,12 +50,21 @@
 			</button>
 		{% endfor %}
 		<br>
+<<<<<<< HEAD
 		<label>Par note</label>
 		{{ form_widget(form.note) }}
 		<br>
 		<label>Decroissant</label>
+=======
+			<label>Par note</label>
+		{{ form_widget(form.note) }}
+		<br>
+			<label>Decroissant</label>
+>>>>>>> 2f867cefca2d22418dbbd3ed74e5c95d6087a0e4
 		{{ form_widget(form.decroissant) }}
 	</div>
+	
+	{{ form_end(form) }}
 
 	{{ form_end(form) }}
 
@@ -49,24 +72,42 @@
 	{% if id > 0 %}
 		<button type="button">
 			<a href="
+<<<<<<< HEAD
 																						{% if search == NULL %}
 																						{{ path(page, {'id': id - 1}) }}
 																							{% else %}
 																						{{ path(page, {'id': id - 1, 'search' : search}) }}
 																						{% endif %}
 																						">Page précédente</a>
+=======
+										{% if search == NULL %}
+										{{ path(page, {'id': id - 1}) }}
+											{% else %}
+										{{ path(page, {'id': id - 1, 'search' : search}) }}
+										{% endif %}
+										">Page précédente</a>
+>>>>>>> 2f867cefca2d22418dbbd3ed74e5c95d6087a0e4
 		</button>
 	{% endif %}
 
 	{% if id < size/10 - 1 %}
 		<button type="button">
 			<a href="
+<<<<<<< HEAD
 																						{% if search == NULL %}
 																						{{ path(page, {'id': id + 1}) }}
 																							{% else %}
 																						{{ path(page, {'id': id + 1, 'search' : search}) }}
 																						{% endif %}
 																						">Page suivante</a>
+=======
+										{% if search == NULL %}
+										{{ path(page, {'id': id + 1}) }}
+											{% else %}
+										{{ path(page, {'id': id + 1, 'search' : search}) }}
+										{% endif %}
+										">Page suivante</a>
+>>>>>>> 2f867cefca2d22418dbbd3ed74e5c95d6087a0e4
 		</button>
 	{% endif %}
 	<p>{{ size }}

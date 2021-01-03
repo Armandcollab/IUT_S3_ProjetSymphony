@@ -4,8 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Season;
 use App\Entity\Series;
+<<<<<<< HEAD
 use App\Entity\Rating;
 use App\Entity\Genre;
+=======
+use App\Entity\Genre;
+use App\Entity\Rating;
+>>>>>>> 2f867cefca2d22418dbbd3ed74e5c95d6087a0e4
 use App\Form\SearchBarFormType;
 use App\Form\RatingFormType;
 use Doctrine\Persistence\ObjectManager;
@@ -98,10 +103,17 @@ class SeriesController extends AbstractController
             $search = $_GET['search'];
         }
         if (isset($_GET['note'])) {
+<<<<<<< HEAD
             $query->innerJoin(Rating::class, 'r', 'WITH', 'r.series = series.id');
             if (isset($_GET['desc'])) {
                 $query->orderBy('r.value', 'DESC');
             } else {
+=======
+            $query->innerJoin(Rating::class,'r', 'WITH', 'r.series = series.id');
+            if (isset($_GET['desc'])){
+                $query->orderBy('r.value', 'DESC');
+            }else{
+>>>>>>> 2f867cefca2d22418dbbd3ed74e5c95d6087a0e4
                 $query->orderBy('r.value', 'ASC');
             }
         }
@@ -139,8 +151,11 @@ class SeriesController extends AbstractController
         ]);
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2f867cefca2d22418dbbd3ed74e5c95d6087a0e4
     /**
      * @Route("/{id}", name="series_show", methods={"GET","POST"})
      */
@@ -174,6 +189,7 @@ class SeriesController extends AbstractController
 
             $seasons[$season->getnumber()] = $query->getResult();
         }
+<<<<<<< HEAD
         $form = $this->createForm(RatingFormType::class, [
             'serie_show' => $series,
             'user_show' => $user,
@@ -199,6 +215,10 @@ class SeriesController extends AbstractController
                 return $this->redirect($request->getUri());
             }
         }
+=======
+
+        $suivie = in_array($series, $user->getSeries()->toArray());
+>>>>>>> 2f867cefca2d22418dbbd3ed74e5c95d6087a0e4
 
         $ytbcode = substr($series->getYoutubeTrailer(), strpos($series->getYoutubeTrailer(), "=") + 1);
         $imdbcode = $series->getImdb();
