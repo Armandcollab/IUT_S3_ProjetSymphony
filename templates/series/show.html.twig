@@ -55,11 +55,19 @@
 				<td>
 					<button class="season_nav">Consulter l'ensemble des épisodes</button>
 					<ul>
+						{% set 	seasonNBR = 1 %}
 						{% for season in seasons %}
-							<li >Season
-								{{season.number}}</li>
+							<li>Season
+								{{seasonNBR}}
+								{% set seasonNBR = seasonNBR + 1 %}
+							</li>
 							<div class="episodes">
-								<p>TEST</p>
+								<ul>
+									{% for episode in season %}
+										<li>{{episode.title}}</li>
+
+									{% endfor %}
+								</ul>
 							</div>
 
 						{% endfor %}

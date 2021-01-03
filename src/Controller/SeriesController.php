@@ -111,7 +111,19 @@ class SeriesController extends AbstractController
         WHERE s.series = $id
         ORDER BY s.number");
 
-        $seasons = $query->getResult();
+        $seasonss = $query->getResult();
+
+        foreach($seasonss as $season){
+            $seasonId = $season->getId();
+            $query = $em->createQuery("SELECT e.title
+            FROM App:Episode e
+            INNER JOIN App:Season ss WITH e.season = ss.id
+            WHERE ss.id = $seasonId
+            ORDER BY e.number");
+    
+            $seasons[$season->getnumber()] = $query->getResult();
+        }
+       
 
 
         $suivie = in_array($series, $user->getSeries()->toArray());
