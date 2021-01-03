@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Season;
 use App\Entity\Series;
+use App\Entity\Genre;
 use App\Form\SearchBarFormType;
 use Doctrine\Persistence\ObjectManager;
 use App\Repository\SearchRepository;
@@ -76,7 +77,7 @@ class SeriesController extends AbstractController
         $search = false;
         if ($form->isSubmitted() && $form->isValid()) {
             $search = $form->getData()->getTitle();
-            return $this->redirectToRoute($pages, array('id' => 0,'search' => $search));
+            return $this->redirectToRoute($pages, array('id' => 0, 'search' => $search));
         } else if (isset($_GET['search'])) {
             $search = $_GET['search'];
         }
@@ -96,13 +97,20 @@ class SeriesController extends AbstractController
             ->getQuery()
             ->execute();
 
+        $genres = $this->getDoctrine()
+        ->getRepository(Genre::class)
+        ->createQueryBuilder('genres')
+        ->getQuery()
+        ->execute();
+
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'size' => $size,
             'id' => $id,
             'page' => $pages,
             'form' => $form->createView(),
-            'search' => $search
+            'search' => $search,
+            'genres' => $genres
         ]);
     }
 
@@ -134,10 +142,7 @@ class SeriesController extends AbstractController
             $seasons[$season->getnumber()] = $query->getResult();
         }
 
-
-
         $suivie = in_array($series, $user->getSeries()->toArray());
-
 
         $ytbcode = substr($series->getYoutubeTrailer(), strpos($series->getYoutubeTrailer(), "=") + 1);
         $imdbcode = $series->getImdb();

@@ -29,7 +29,7 @@
 #myBtnContainer {
     display: none;
     margin: 1rem;
-    flex: nowrap;
+    flex-wrap: wrap;
 }
 
 

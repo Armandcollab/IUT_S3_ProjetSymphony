@@ -12,61 +12,54 @@
 		<h1>Voici les séries que vous suivez !</h1>
 
 	{% endif %}
-		<h1>Consulter l'ensemble des séries</h1>
+	<h1>Consulter l'ensemble des séries</h1>
 
-		<p>
-			<b>Recherche par titre</b>
-		</p>
+	<p>
+		<b>Recherche par titre</b>
+	</p>
 
-		{{ form_start(form) }}
-		{{ form_widget(form.title) }}
-		<b>Filtres :</b>
-		{{ form_widget(form.filters) }}
-		<br>
-		<br>
-		{{ form_end(form) }}
+	{{ form_start(form) }}
+	{{ form_widget(form.title) }}
+	<b>Filtres :</b>
+	{{ form_widget(form.filters) }}
+	<br>
+	<br>
+	{{ form_end(form) }}
 
 	<!-- Control buttons -->
 	<div id="myBtnContainer" class="filters-container">
 		<button class="btn active" onclick="filterSelection('all')">
 			<label>Tout voir</label>
 		</button>
-		<button class="btn" onclick="filterSelection('cars')">
-			<label>Cars</label>
-		</button>
-		<button class="btn" onclick="filterSelection('animals')">
-			<label>Animals</label>
-		</button>
-		<button class="btn" onclick="filterSelection('fruits')">
-			<label>Fruits</label>
-		</button>
-		<button class="btn" onclick="filterSelection('colors')">
-			<label>Colors</label>
-		</button>
+		{% for genre in genres %}
+			<button class="btn" onclick="filterSelection('cars')">
+				<label>{{genre.name}}</label>
+			</button>
+		{% endfor %}
 	</div>
 
 
 	{% if id > 0 %}
 		<button type="button">
 			<a href="
-						{% if search == NULL %}
-						{{ path(page, {'id': id - 1}) }}
-							{% else %}
-						{{ path(page, {'id': id - 1, 'search' : search}) }}
-						{% endif %}
-						">Page précédente</a>
+										{% if search == NULL %}
+										{{ path(page, {'id': id - 1}) }}
+											{% else %}
+										{{ path(page, {'id': id - 1, 'search' : search}) }}
+										{% endif %}
+										">Page précédente</a>
 		</button>
 	{% endif %}
 
 	{% if id < size/10 - 1 %}
 		<button type="button">
 			<a href="
-						{% if search == NULL %}
-						{{ path(page, {'id': id + 1}) }}
-							{% else %}
-						{{ path(page, {'id': id + 1, 'search' : search}) }}
-						{% endif %}
-						">Page suivante</a>
+										{% if search == NULL %}
+										{{ path(page, {'id': id + 1}) }}
+											{% else %}
+										{{ path(page, {'id': id + 1, 'search' : search}) }}
+										{% endif %}
+										">Page suivante</a>
 		</button>
 	{% endif %}
 	<p>{{ size }}
