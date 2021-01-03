@@ -37,17 +37,11 @@ class SeriesController extends AbstractController
      */
     public function page(Int $id): Response
     {
-        $request = Request::createFromGlobals();
         $series = $this->getDoctrine()
-            ->getRepository(Series::class)
-            ->findBy([], [], 10, $id * 10);
+            ->getRepository(Series::class)->createQueryBuilder('series');
 
-        return $this->series($series, $id, 'series_pages', $request);
+        return $this->series($series, $id, 'series_pages');
     }
-
-
-
-
 
     /**
      * @Route("/followed/page/0", name="series_followed")
@@ -61,41 +55,56 @@ class SeriesController extends AbstractController
      */
     public function pageFollow(Int $id, UserInterface $user): Response
     {
-        $request = Request::createFromGlobals();
         $userID = $user->getId();
 
         $em = $this->getDoctrine()->getManager();
 
-        $query = $em->createQuery("SELECT s
-        FROM App:Series s
-        LEFT JOIN s.user u
-        WHERE u.id = $userID
-        ORDER BY s.id")
-            ->setMaxResults(10)
-            ->setFirstResult($id * 10);
+        $query = $this->getDoctrine()
+            ->getRepository(Series::class)
+            ->createQueryBuilder('series')
+            ->leftJoin('series.user', 'user')
+            ->where('user.id = :userId')
+            ->setParameters(array(':userId' => $userID));
 
-
-        $series = $query->getResult();
-
-        return $this->series($series, $id, 'series_page_followed', $request);
+        return $this->series($query, $id, 'series_page_followed');
     }
 
-    public function series($series, Int $id, $pages, Request $request): Response
+    public function series($query, Int $id, $pages): Response
     {
         $form = $this->createForm(SearchBarFormType::class);
-        $form->handleRequest($request);
+        $form->handleRequest(Request::createFromGlobals());
+        $search = false;
         if ($form->isSubmitted() && $form->isValid()) {
-            (array)$series = $this->getDoctrine()
-                ->getRepository(Series::class)->findSeries($form->getData()->getTitle());
+            $search = $form->getData()->getTitle();
+            return $this->redirectToRoute($pages, array('id' => 0,'search' => $search));
+        } else if (isset($_GET['search'])) {
+            $search = $_GET['search'];
         }
+
+        if ($search != false) {
+            $query->andWhere('series.title LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $search . '%');
+        }
+
+        $size = count($query
+            ->getQuery()
+            ->execute());
+
+        $series = $query
+            ->setMaxResults(10)
+            ->setFirstResult($id * 10)
+            ->getQuery()
+            ->execute();
+
         return $this->render('series/index.html.twig', [
             'series' => $series,
+            'size' => $size,
             'id' => $id,
             'page' => $pages,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'search' => $search
         ]);
     }
-
 
     /**
      * @Route("/{id}", name="series_show", methods={"GET"})

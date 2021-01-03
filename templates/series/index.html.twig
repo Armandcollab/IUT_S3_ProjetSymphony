@@ -10,7 +10,8 @@
 	{% if app.user and app.request.get('_route') == 'series_followed'%}
 
 		<h1>Voici les séries que vous suivez !</h1>
-	{% else %}
+
+	{% endif %}
 		<h1>Consulter l'ensemble des séries</h1>
 
 		<p>
@@ -24,7 +25,6 @@
 		<br>
 		<br>
 		{{ form_end(form) }}
-	{% endif %}
 
 	<!-- Control buttons -->
 	<div id="myBtnContainer" class="filters-container">
@@ -48,16 +48,28 @@
 
 	{% if id > 0 %}
 		<button type="button">
-			<a href="{{ path(page, {'id': id - 1}) }}">Page précédente</a>
+			<a href="
+						{% if search == NULL %}
+						{{ path(page, {'id': id - 1}) }}
+							{% else %}
+						{{ path(page, {'id': id - 1, 'search' : search}) }}
+						{% endif %}
+						">Page précédente</a>
 		</button>
 	{% endif %}
 
-	{% if id/10 < series|length - 1 %}
+	{% if id < size/10 - 1 %}
 		<button type="button">
-			<a href="{{path(page,{'id':id+1})}}">Page suivante</a>
+			<a href="
+						{% if search == NULL %}
+						{{ path(page, {'id': id + 1}) }}
+							{% else %}
+						{{ path(page, {'id': id + 1, 'search' : search}) }}
+						{% endif %}
+						">Page suivante</a>
 		</button>
 	{% endif %}
-	<p>{{ series|length }}
+	<p>{{ size }}
 		références</p>
 </nav>
 
