@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Season;
 use App\Entity\Series;
 use App\Entity\Genre;
+use App\Entity\Rating;
 use App\Form\SearchBarFormType;
 use Doctrine\Persistence\ObjectManager;
 use App\Repository\SearchRepository;
@@ -77,10 +78,21 @@ class SeriesController extends AbstractController
         $search = false;
         if ($form->isSubmitted() && $form->isValid()) {
             $search = $form->getData()->getTitle();
-            return $this->redirectToRoute($pages, array('id' => 0, 'search' => $search));
+            $note = null; //TODO checkbox bastien ;)
+            $desc = null; //TODO checkbox
+            return $this->redirectToRoute($pages, array('id' => 0, 'search' => $search, 'note' => $note, 'desc' => $desc));
         } else if (isset($_GET['search'])) {
             $search = $_GET['search'];
         }
+        if (isset($_GET['note'])) {
+            $query->innerJoin(Rating::class,'r', 'WITH', 'r.series = series.id');
+            if (isset($_GET['desc'])){
+                $query->orderBy('r.value', 'DESC');
+            }else{
+                $query->orderBy('r.value', 'ASC');
+            }
+        }
+
 
         if ($search != false) {
             $query->andWhere('series.title LIKE :searchTerm')
@@ -98,10 +110,10 @@ class SeriesController extends AbstractController
             ->execute();
 
         $genres = $this->getDoctrine()
-        ->getRepository(Genre::class)
-        ->createQueryBuilder('genres')
-        ->getQuery()
-        ->execute();
+            ->getRepository(Genre::class)
+            ->createQueryBuilder('genres')
+            ->getQuery()
+            ->execute();
 
         return $this->render('series/index.html.twig', [
             'series' => $series,

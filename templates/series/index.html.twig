@@ -24,7 +24,6 @@
 	{{ form_widget(form.filters) }}
 	<br>
 	<br>
-	{{ form_end(form) }}
 
 	<!-- Control buttons -->
 	<div id="myBtnContainer" class="filters-container">
@@ -36,7 +35,15 @@
 				<label>{{genre.name}}</label>
 			</button>
 		{% endfor %}
+		<br>
+			<label>Par note</label>
+		{{ form_widget(form.note) }}
+		<br>
+			<label>Decroissant</label>
+		{{ form_widget(form.decroissant) }}
 	</div>
+	
+	{{ form_end(form) }}
 
 
 	{% if id > 0 %}
