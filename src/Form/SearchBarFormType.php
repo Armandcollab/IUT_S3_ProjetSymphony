@@ -21,6 +21,18 @@ class SearchBarFormType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'attr' => ['onclick' => 'filterSettingChecked()']
+            ])
+            ->add('note', CheckboxType::class, [
+                'label' => 'par note',
+                'required' => false,
+                'mapped' => false,
+                'attr' => ['onclick' => 'FilterRatingChecked()']
+            ])
+            ->add('decroissant', CheckboxType::class, [
+                'label' => 'décroissant',
+                'required' => false,
+                'mapped' => false,
+                'attr' => ['onclick' => 'FilterRatingDESCChecked()']
             ]);
     }
 

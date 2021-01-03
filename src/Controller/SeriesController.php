@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Season;
 use App\Entity\Series;
+use App\Entity\Rating;
+use App\Entity\Genre;
 use App\Form\SearchBarFormType;
+use App\Form\RatingFormType;
 use Doctrine\Persistence\ObjectManager;
 use App\Repository\SearchRepository;
 use App\Entity\User;
@@ -16,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 
 /**
@@ -25,6 +29,12 @@ class SeriesController extends AbstractController
 {
 
     /**
+     * inject securty service
+     * @var Security
+     */
+    private $security;
+
+    /**
      * @Route("/page/0", name="series_index")
      */
     public function index(): Response
@@ -32,22 +42,21 @@ class SeriesController extends AbstractController
         return $this->page(0);
     }
 
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @Route("/page/{id}", name="series_pages", methods={"GET"})
      */
     public function page(Int $id): Response
     {
-        $request = Request::createFromGlobals();
         $series = $this->getDoctrine()
-            ->getRepository(Series::class)
-            ->findBy([], [], 10, $id * 10);
+            ->getRepository(Series::class)->createQueryBuilder('series');
 
-        return $this->series($series, $id, 'series_pages', $request);
+        return $this->series($series, $id, 'series_pages');
     }
-
-
-
-
 
     /**
      * @Route("/followed/page/0", name="series_followed")
@@ -61,50 +70,91 @@ class SeriesController extends AbstractController
      */
     public function pageFollow(Int $id, UserInterface $user): Response
     {
-        $request = Request::createFromGlobals();
         $userID = $user->getId();
 
         $em = $this->getDoctrine()->getManager();
 
-        $query = $em->createQuery("SELECT s
-        FROM App:Series s
-        LEFT JOIN s.user u
-        WHERE u.id = $userID
-        ORDER BY s.id")
-            ->setMaxResults(10)
-            ->setFirstResult($id * 10);
+        $query = $this->getDoctrine()
+            ->getRepository(Series::class)
+            ->createQueryBuilder('series')
+            ->leftJoin('series.user', 'user')
+            ->where('user.id = :userId')
+            ->setParameters(array(':userId' => $userID));
 
-
-        $series = $query->getResult();
-
-        return $this->series($series, $id, 'series_page_followed', $request);
+        return $this->series($query, $id, 'series_page_followed');
     }
 
-    public function series($series, Int $id, $pages, Request $request): Response
+    public function series($query, Int $id, $pages): Response
     {
         $form = $this->createForm(SearchBarFormType::class);
-        $form->handleRequest($request);
+        $form->handleRequest(Request::createFromGlobals());
+        $search = false;
         if ($form->isSubmitted() && $form->isValid()) {
-            (array)$series = $this->getDoctrine()
-                ->getRepository(Series::class)->findSeries($form->getData()->getTitle());
+            $search = $form->getData()->getTitle();
+            $note = null; //TODO checkbox bastien ;)
+            $desc = null; //TODO checkbox
+            return $this->redirectToRoute($pages, array('id' => 0, 'search' => $search, 'note' => $note, 'desc' => $desc));
+        } else if (isset($_GET['search'])) {
+            $search = $_GET['search'];
         }
+        if (isset($_GET['note'])) {
+            $query->innerJoin(Rating::class, 'r', 'WITH', 'r.series = series.id');
+            if (isset($_GET['desc'])) {
+                $query->orderBy('r.value', 'DESC');
+            } else {
+                $query->orderBy('r.value', 'ASC');
+            }
+        }
+
+
+        if ($search != false) {
+            $query->andWhere('series.title LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $search . '%');
+        }
+
+        $size = count($query
+            ->getQuery()
+            ->execute());
+
+        $series = $query
+            ->setMaxResults(10)
+            ->setFirstResult($id * 10)
+            ->getQuery()
+            ->execute();
+
+        $genres = $this->getDoctrine()
+            ->getRepository(Genre::class)
+            ->createQueryBuilder('genres')
+            ->getQuery()
+            ->execute();
+
         return $this->render('series/index.html.twig', [
             'series' => $series,
+            'size' => $size,
             'id' => $id,
             'page' => $pages,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'search' => $search,
+            'genres' => $genres
         ]);
     }
 
 
+
     /**
-     * @Route("/{id}", name="series_show", methods={"GET"})
+     * @Route("/{id}", name="series_show", methods={"GET","POST"})
      */
-    public function show(Series $series, UserInterface $user): Response
+    public function show(Series $series): Response
     {
         $em = $this->getDoctrine()->getManager();
+        // get user from security service
+        $user = $this->security->getUser();
 
         $id = $series->getId();
+        $suivie = null;
+
+        $request = Request::createFromGlobals();
+
 
         $query = $em->createQuery("SELECT s
         FROM App:Season s
@@ -124,11 +174,31 @@ class SeriesController extends AbstractController
 
             $seasons[$season->getnumber()] = $query->getResult();
         }
+        $form = $this->createForm(RatingFormType::class, [
+            'serie_show' => $series,
+            'user_show' => $user,
+        ]);
+        if ($user != null) {
+            $suivie = in_array($series, $user->getSeries()->toArray());
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $value = $form['value']->getData();
+                $comment = $form['comment']->getData();
+                $date = $form['date']->getData();
 
+                $rating = new Rating();
+                $rating->setValue($value);
+                $rating->setComment($comment);
+                $rating->setDate($date);
+                $rating->setUser($user);
+                $rating->setSeries($series);
 
-
-        $suivie = in_array($series, $user->getSeries()->toArray());
-
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($rating);
+                $em->flush();
+                return $this->redirect($request->getUri());
+            }
+        }
 
         $ytbcode = substr($series->getYoutubeTrailer(), strpos($series->getYoutubeTrailer(), "=") + 1);
         $imdbcode = $series->getImdb();
@@ -137,7 +207,8 @@ class SeriesController extends AbstractController
             'seasons' => $seasons,
             'suivie' => $suivie,
             'ytbcode' => $ytbcode,
-            'imdbcode' => $imdbcode
+            'imdbcode' => $imdbcode,
+            'ratingform' => $form->createView()
         ]);
     }
 
@@ -159,7 +230,7 @@ class SeriesController extends AbstractController
         $userBD->addSeries($serie);
         $em->flush();
 
-        return $this->show($serie, $user);
+        return $this->show($serie);
     }
 
 
@@ -173,6 +244,6 @@ class SeriesController extends AbstractController
         $userBD->removeSeries($serie);
         $em->flush();
 
-        return $this->show($serie, $user);
+        return $this->show($serie);
     }
 }
