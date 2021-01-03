@@ -14,6 +14,4 @@ class SearchRepository extends EntityRepository
             ->getQuery()
             ->execute();
     }
-
-   
 }

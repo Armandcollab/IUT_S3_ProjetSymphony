@@ -7,19 +7,24 @@
 
 
 <nav class="searchform">
-	<h1>Consulter l'ensemble des séries</h1>
-	<p>
-		<b>Recherche par titre</b>
-	</p>
+	{% if app.user and app.request.get('_route') == 'series_followed'%}
 
-	{{ form_start(form) }}
-	{{ form_widget(form.title) }}
-	<b>Filtres :</b>
-	{{ form_widget(form.filters) }}
-	<br>
-	<br>
+		<h1>Voici les séries que vous suivez !</h1>
+	{% else %}
+		<h1>Consulter l'ensemble des séries</h1>
 
-	{{ form_end(form) }}
+		<p>
+			<b>Recherche par titre</b>
+		</p>
+
+		{{ form_start(form) }}
+		{{ form_widget(form.title) }}
+		<b>Filtres :</b>
+		{{ form_widget(form.filters) }}
+		<br>
+		<br>
+		{{ form_end(form) }}
+	{% endif %}
 
 	<!-- Control buttons -->
 	<div id="myBtnContainer" class="filters-container">

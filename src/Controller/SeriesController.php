@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Season;
 use App\Entity\Series;
 use App\Form\SearchBarFormType;
+use Doctrine\Persistence\ObjectManager;
 use App\Repository\SearchRepository;
 use App\Entity\User;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -113,29 +114,30 @@ class SeriesController extends AbstractController
 
         $seasonss = $query->getResult();
 
-        foreach($seasonss as $season){
+        foreach ($seasonss as $season) {
             $seasonId = $season->getId();
             $query = $em->createQuery("SELECT e.title
             FROM App:Episode e
             INNER JOIN App:Season ss WITH e.season = ss.id
             WHERE ss.id = $seasonId
             ORDER BY e.number");
-    
+
             $seasons[$season->getnumber()] = $query->getResult();
         }
-       
+
 
 
         $suivie = in_array($series, $user->getSeries()->toArray());
 
 
-        $ytbcode = substr($series->getYoutubeTrailer(), strpos($series->getYoutubeTrailer(), "=") + 1);;
-
+        $ytbcode = substr($series->getYoutubeTrailer(), strpos($series->getYoutubeTrailer(), "=") + 1);
+        $imdbcode = $series->getImdb();
         return $this->render('series/show.html.twig', [
             'series' => $series,
             'seasons' => $seasons,
             'suivie' => $suivie,
-            'ytbcode' => $ytbcode
+            'ytbcode' => $ytbcode,
+            'imdbcode' => $imdbcode
         ]);
     }
 
