@@ -2,6 +2,20 @@
     margin: 2rem;
 }
 
+.searchform p,
+h1 {
+    color: white;
+}
+
+.seriebackground {
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../../other/background/wp1837544.jpg");
+    padding: 2rem;
+    background-position-x: 40%;
+    background-position-y: 46%;
+    background-size: cover;
+    box-shadow: 5px 10px 20px black inset;
+}
+
 .login-form {
     margin: 2rem;
 }
@@ -21,7 +35,7 @@
 }
 
 .filters-container {
-    background-color: gray;
+    background-color: #4D4D4D;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -131,8 +145,17 @@ a {
 }
 
 .primary {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 1rem;
+    background-color: #262626;
+    box-shadow: 3px 3px #FA314A, -1em 0
+}
+
+.imp {
+    background-color: #FA314A;
+}
+
+.navbar-link {
+    font-family: Helvetica, sans-serif;
+    font-size: 1rem;
 }
 
 .image {
@@ -141,12 +164,23 @@ a {
     height: 2.6em;
 }
 
+#user-icon {
+    vertical-align: center;
+    margin-top: 0.4rem;
+}
+
 .navbar-brand {
     margin: 1rem;
 }
 
 .episodes {
     display: none;
+}
+
+.series-list {
+    background-color: black;
+    padding-top: 1rem;
+    box-shadow: 5px 10px 30px #4D4D4D inset;
 }
 
 .serie {

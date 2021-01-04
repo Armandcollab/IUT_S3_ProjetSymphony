@@ -1,5 +1,18 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme ratingform.value _self %}
+
+{% block choice_widget %}
+
+	{% if choices %}
+		{% for choice in choices %}
+			<input type="radio" id="rating_form_value_{{choice.label}}" name="rating_form[value]" 
+			class="star" required="required" value="{{choice.label}}"/>
+		{% endfor %}
+	{% endif %}
+	<br>
+{% endblock %}
+
 {% block title %}Series
 {% endblock %}
 
@@ -23,84 +36,88 @@
 			<tr>
 				<th>Imdb</th>
 				<td>
-					<a href="https://www.imdb.com/title/{{imdbcode}}/" alt="imdb-page"> Consulter la page Imdb </a></td>
+					<a href="https://www.imdb.com/title/{{imdbcode}}/" alt="imdb-page">
+						Consulter la page Imdb
+					</a>
 				</td>
-			</tr>
-			<tr>
-				<th>Poster</th>
-				<td><img src="{{path('series_poster', {'id': series.id} ) }}" alt="poster"></td>
-			</tr>
-			<tr>
-				<th>Director</th>
-				<td>{{ series.director }}</td>
-			</tr>
-			<tr>
-				<th>YoutubeTrailer</th>
-				<td>
-					<iframe width="420" height="345" src="https://www.youtube.com/embed/{{ytbcode}}?autoplay=1&mute=1"></iframe>
-				</td>
-			</tr>
-			<tr>
-				<th>Awards</th>
-				<td>{{ series.awards }}</td>
-			</tr>
-			<tr>
-				<th>YearStart</th>
-				<td>{{ series.yearStart }}</td>
-			</tr>
-			<tr>
-				<th>YearEnd</th>
-				<td>{{ series.yearEnd }}</td>
-			</tr>
-			<tr>
-				<th>Seasons</th>
-				<td>
-					<button class="season_nav">Consulter l'ensemble des épisodes</button>
-					<ul>
-						{% set 	seasonNBR = 1 %}
-						{% for season in seasons %}
-							<li>Season
-								{{seasonNBR}}
-								{% set seasonNBR = seasonNBR + 1 %}
-							</li>
-							<div class="episodes">
-								<ul>
-									{% for episode in season %}
-										<li>{{episode.title}}</li>
-
-									{% endfor %}
-								</ul>
-							</div>
-
-						{% endfor %}
-					</ul>
-				</td>
-			</tr>
-			<tr>
-			{% if app.user %}
-				<th>Suivie</th>
-				<td>
-					{% if suivie %}
-						<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
-							✅
-						</a>
-					{% else %}
-						<a href="{{ path('series_follow', {'id' : series.id } ) }}">❌
-						</a>
-					{% endif %}
-				</td>
-				<tr>
-				<th>Votre évalutation</th>
-				<td>
-				{{ form_start(ratingform) }}
-				{{ form_widget(ratingform.value) }}
-				{{ form_widget(ratingform.comment) }}
-				{{ form_end(ratingform) }}
-				<br>
-				</td>
-				</tr>
-			{% endif %}
 			</tr>
 		</tbody>
 	</td>
-</tr></tbody></table><a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>{% endblock %}
+</tr>
+<tr>
+	<th>Poster</th>
+	<td><img src="{{path('series_poster', {'id': series.id} ) }}" alt="poster"></td>
+</tr>
+<tr>
+	<th>Director</th>
+	<td>{{ series.director }}</td>
+</tr>
+<tr>
+	<th>YoutubeTrailer</th>
+	<td>
+		<iframe width="420" height="345" src="https://www.youtube.com/embed/{{ytbcode}}?autoplay=1&mute=1"></iframe>
+	</td>
+</tr>
+<tr>
+	<th>Awards</th>
+	<td>{{ series.awards }}</td>
+</tr>
+<tr>
+	<th>YearStart</th>
+	<td>{{ series.yearStart }}</td>
+</tr>
+<tr>
+	<th>YearEnd</th>
+	<td>{{ series.yearEnd }}</td>
+</tr>
+<tr>
+	<th>Seasons</th>
+	<td>
+		<button class="season_nav">Consulter l'ensemble des épisodes</button>
+		<ul>
+			{% set 	seasonNBR = 1 %}
+			{% for season in seasons %}
+				<li>Season
+					{{seasonNBR}}
+					{% set seasonNBR = seasonNBR + 1 %}
+				</li>
+				<div class="episodes">
+					<ul>
+						{% for episode in season %}
+							<li>{{episode.title}}</li>
+
+						{% endfor %}
+					</ul>
+				</div>
+
+			{% endfor %}
+		</ul>
+	</td>
+</tr>
+<tr>
+	{% if app.user %}
+		<th>Suivie</th>
+		<td>
+			{% if suivie %}
+				<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
+					✅
+				</a>
+			{% else %}
+				<a href="{{ path('series_follow', {'id' : series.id } ) }}">❌
+				</a>
+			{% endif %}
+		</td>
+		<tr>
+			<th>Votre évalutation</th>
+			<td>
+				{{ form_start(ratingform) }}
+				<p>Votre note :</p>
+				{{ form_widget(ratingform.value ) }}
+				<p>Votre avis :</p>
+				{{ form_widget(ratingform.comment) }}
+				{{ form_end(ratingform) }}
+				<br>
+			</td>
+		</tr>
+	{% endif %}
+</tr></tbody></td></tr></tbody></table><a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>{% endblock %}

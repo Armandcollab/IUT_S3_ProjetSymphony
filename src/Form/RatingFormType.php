@@ -36,6 +36,7 @@ class RatingFormType extends AbstractType
                     '5' => '5',
                 ),
                 'mapped' => true,
+                'label' => false,
                 'multiple' => false,
                 'required' => true,
                 'constraints' => [
