@@ -5,126 +5,120 @@
 
 {% block body %}
 
-<div class="seriebackground">
-	<nav class="searchform">
-		{% if app.user and app.request.get('_route') == 'series_followed'%}
+	<div class="seriebackground">
+		<nav class="searchform">
+			{% if app.user and app.request.get('_route') == 'series_followed'%}
 
-			<h1>Voici les séries que vous suivez !</h1>
-		{% else %}
-			<h1>Consulter l'ensemble des séries</h1>
-		{% endif %}
-		<p>
-			<b>Recherche par titre</b>
-		</p>
+				<h1>Voici les séries que vous suivez !</h1>
+			{% else %}
+				<h1>Consulter l'ensemble des séries</h1>
+			{% endif %}
+			<p>
+				<b>Recherche par titre</b>
+			</p>
 
-		{{ form_start(form) }}
-		{{ form_widget(form.title) }}
-		<p>Filtres :</p>
-		{{ form_widget(form.filters) }}
-		<br>
-		<br>
+			{{ form_start(searchform) }}
+			{{ form_widget(searchform.title) }}
+			<p>Filtres :</p>
+			{{ form_widget(searchform.filters) }}
+			<br>
+			<br>
 
-		<!-- Control buttons -->
-		<div id="myBtnContainer" class="filters-container">
-			<button class="btn active" onclick="filterSelection('all')">
-				<label>Tout voir</label>
-			</button>
-			{% for genre in genres %}
-				<button class="btn" onclick="filterSelection('cars')">
-					<label>{{genre.name}}</label>
-				</button>
+
+			{{ form_end(searchform) }}
+			<br>
+			{{ form_start(categoriesform) }}
+			{% for genre in categoriesform.genres %}
+				<div>
+					{{ form_errors(genre) }}
+					{{ form_row(genre.name) }}
+				</div>
 			{% endfor %}
+			{{ form_end(categoriesform) }}
 			<br>
-			<label>Par note</label>
-			{{ form_widget(form.note) }}
-			<br>
-			<label>Decroissant</label>
-			{{ form_widget(form.decroissant) }}
-		</div>
 
-		{{ form_end(form) }}
+			{% if id > 0 %}
+				<button type="button">
+					<a href="
+																					{% if search == NULL %}
+																					{{ path(page, {'id': id - 1}) }}
+																						{% else %}
+																					{{ path(page, {'id': id - 1, 'search' : search}) }}
+																					{% endif %}
+																					">Page précédente</a>
+				</button>
+			{% endif %}
 
-		{{ form_end(form) }}
-
-
-		{% if id > 0 %}
-			<button type="button">
-				<a href="
-															{% if search == NULL %}
-															{{ path(page, {'id': id - 1}) }}
-																{% else %}
-															{{ path(page, {'id': id - 1, 'search' : search}) }}
-															{% endif %}
-															">Page précédente</a>
-			</button>
-		{% endif %}
-
-		{% if id < size/10 - 1 %}
-			<button type="button">
-				<a href="
-															{% if search == NULL %}
-															{{ path(page, {'id': id + 1}) }}
-																{% else %}
-															{{ path(page, {'id': id + 1, 'search' : search}) }}
-															{% endif %}
-															">Page suivante</a>
-			</button>
-		{% endif %}
-		<p>{{ size }}
-			références</p>
-	</nav>
-</div>
-
-<main class="series-list">
-
-
-{% for series in series %}
-	<div class="serie">
-		<header class="serie-title">
-			{{ series.title }}
-		</header>
-		<div class="serie-content">
-			<div class="serie-poster">*
-				<td><img src="{{path('series_poster', {'id': series.id} ) }}" alt="poster"></td>
-			</div>
-			<article class="serie-description">
-
-				<div class="serie-plot">
-					<h5>Histoire</h5>
-					<p>{{ series.plot }}</p>
-				</div>
-				<div class="serie-details">
-					<ul>
-						<li>
-							<p>Année de lancement :
-								{{ series.yearStart }}</p>
-						</li>
-						<li>
-							<p>Année de fin :
-								{{ series.yearEnd }}</p>
-						</li>
-						<li>
-							<p>Prix :
-								{{ series.awards }}</p>
-						</li>
-						<button type="button" id="seemore">
-							<a href="{{ path('series_show', {'id': series.id}) }}">Plus de détails</a>
-						</button>
-					</ul>
-				</div>
-
-
-			</article>
-
-
-		</div>
-
-
+			{% if id < size/10 - 1 %}
+				<button type="button">
+					<a href="
+																					{% if search == NULL %}
+																					{{ path(page, {'id': id + 1}) }}
+																						{% else %}
+																					{{ path(page, {'id': id + 1, 'search' : search}) }}
+																					{% endif %}
+																					">Page suivante</a>
+				</button>
+			{% endif %}
+			<p>{{ size }}
+				références</p>
+		</nav>
 	</div>
 
-{% else %}
-	<p>Error : no records found</p>
-</tr>{% endfor %}</main>{% block footer   %}
-<footer class="footer primary">
-	Copyright © 2020
-</footer>{% endblock %}{% endblock %}
+	<main class="series-list">
+
+
+		{% for series in series %}
+			<div class="serie">
+				<header class="serie-title">
+					{{ series.title }}
+				</header>
+				<div class="serie-content">
+					<div class="serie-poster">*
+						<td><img src="{{path('series_poster', {'id': series.id} ) }}" alt="poster"></td>
+					</div>
+					<article class="serie-description">
+
+						<div class="serie-plot">
+							<h5>Histoire</h5>
+							<p>{{ series.plot }}</p>
+						</div>
+						<div class="serie-details">
+							<ul>
+								<li>
+									<p>Année de lancement :
+										{{ series.yearStart }}</p>
+								</li>
+								<li>
+									<p>Année de fin :
+										{{ series.yearEnd }}</p>
+								</li>
+								<li>
+									<p>Prix :
+										{{ series.awards }}</p>
+								</li>
+								<button type="button" id="seemore">
+									<a href="{{ path('series_show', {'id': series.id}) }}">Plus de détails</a>
+								</button>
+							</ul>
+						</div>
+
+
+					</article>
+
+
+				</div>
+
+
+			</div>
+
+		{% else %}
+			<p>Error : no records found</p>
+		</tr>
+	{% endfor %}
+</main>
+{% block footer   %}
+	<footer class="footer primary">
+		Copyright © 2020
+	</footer>
+{% endblock %}{% endblock %}
