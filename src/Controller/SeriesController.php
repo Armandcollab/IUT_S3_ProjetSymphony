@@ -2,24 +2,28 @@
 
 namespace App\Controller;
 
+use App\Entity\Country;
+use App\Entity\User;
+use App\Entity\Genre;
+use App\Entity\Rating;
 use App\Entity\Season;
 use App\Entity\Series;
-use App\Entity\Rating;
-use App\Entity\Genre;
-use App\Form\SearchBarFormType;
 use App\Form\RatingFormType;
-use Doctrine\Persistence\ObjectManager;
-use App\Repository\SearchRepository;
-use App\Entity\User;
-use Symfony\Component\Security\Core\User\UserInterface;
-use App\Form\SeriesType;
+use App\Form\SearchBarFormType;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use App\Repository\SearchRepository;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 /**
@@ -86,58 +90,127 @@ class SeriesController extends AbstractController
 
     public function series($query, Int $id, $pages): Response
     {
-        $form = $this->createForm(SearchBarFormType::class);
-        $form->handleRequest(Request::createFromGlobals());
+        // Get genre list
+        $genres = $this->getDoctrine()
+            ->getRepository(Genre::class)
+            ->createQueryBuilder('genres')
+            ->getQuery()
+            ->execute();
+        // Get country list
+        $countries = $this->getDoctrine()
+            ->getRepository(Country::class)
+            ->createQueryBuilder('countries')
+            ->getQuery()
+            ->execute();
+        // Build form from list of genre entites
+        $i = 0;
+        foreach ($genres as $genre) {
+            $formBuilder = $this->get('form.factory')->createNamedBuilder($i, FormType::class, $genres);
+            $formBuilder
+                ->add('genres', EntityType::class, [
+                    'class' => 'App\Entity\Genre',
+                    'required' => true,
+                ])
+                ->add('submit', SubmitType::class, array(
+                    'label' => 'Appliquer',
+                ));
+            $i++;
+        }
+        // Get categories form
+        $categoriesform = $formBuilder->getForm();
+        $i = 0;
+        foreach ($countries as $country) {
+            $formBuilder = $this->get('form.factory')->createNamedBuilder($i, FormType::class, $countries);
+            $formBuilder
+                ->add('countries', EntityType::class, [
+                    'class' => 'App\Entity\Country',
+                    'required' => true,
+                ])
+                ->add('submit', SubmitType::class, array(
+                    'label' => 'Appliquer',
+                ));
+            $i++;
+        }
+        // Get countries form
+        $countriesform = $formBuilder->getForm();
+
+        // Forms : handle request
+        $searchform = $this->createForm(SearchBarFormType::class);
+        $categoriesform->handleRequest(Request::createFromGlobals());
+        $countriesform->handleRequest(Request::createFromGlobals());
+        $searchform->handleRequest(Request::createFromGlobals());
+        // Define GET values
+        $selectedgenre = false;
         $search = false;
-        if ($form->isSubmitted() && $form->isValid()) {
-            $search = $form->getData()->getTitle();
-            $note = null; //TODO checkbox bastien ;)
-            $desc = null; //TODO checkbox
+        $note = null; //TODO checkbox bastien ;)
+        $desc = null; //TODO checkbox
+
+        // handle form if submitted
+        if ($searchform->isSubmitted() && $searchform->isValid()) {
+            $search = $searchform->getData()->getTitle();
+
             return $this->redirectToRoute($pages, array('id' => 0, 'search' => $search, 'note' => $note, 'desc' => $desc));
         } else if (isset($_GET['search'])) {
             $search = $_GET['search'];
         }
         if (isset($_GET['note'])) {
-            $query->innerJoin(Rating::class,'r', 'WITH', 'r.series = series.id');
-            if (isset($_GET['desc'])){
+            $query->innerJoin(Rating::class, 'r', 'WITH', 'r.series = series.id');
+            if (isset($_GET['desc'])) {
                 $query->orderBy('r.value', 'DESC');
-            }else{
+            } else {
                 $query->orderBy('r.value', 'ASC');
             }
         }
 
+        if ($categoriesform->isSubmitted() && $categoriesform->isValid()) {
+            $selectedgenre = new Genre();
+            $selectedgenre = $categoriesform['genres']->getData();
+            return $this->redirectToRoute($pages, array('id' => 0, 'selectedgenre' => $selectedgenre->getName(), 'note' => $note, 'desc' => $desc));
+        } else if (isset($_GET['selectedgenre'])) {
+            $selectedgenre = $_GET['selectedgenre'];
+        }
+        //
+
+        // Verify if GET values are set to change final query according to desired values
 
         if ($search != false) {
             $query->andWhere('series.title LIKE :searchTerm')
                 ->setParameter('searchTerm', '%' . $search . '%');
         }
 
+        if ($selectedgenre != false) {
+            $query->innerJoin('series.genre', 'genre')
+                ->andwhere('genre.name LIKE :genreName')
+                ->setParameter('genreName', $selectedgenre);
+        }
+
+        // Get number of elements outputed by query
+
         $size = count($query
             ->getQuery()
             ->execute());
 
+        // Filters results for the layout of series (10 series per page)
         $series = $query
             ->setMaxResults(10)
             ->setFirstResult($id * 10)
             ->getQuery()
             ->execute();
 
-        $genres = $this->getDoctrine()
-            ->getRepository(Genre::class)
-            ->createQueryBuilder('genres')
-            ->getQuery()
-            ->execute();
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'size' => $size,
             'id' => $id,
             'page' => $pages,
-            'form' => $form->createView(),
+            'searchform' => $searchform->createView(),
+            'categoriesform' => $categoriesform->createView(),
+            'countriesform' => $countriesform->createView(),
             'search' => $search,
             'genres' => $genres
         ]);
     }
+
 
 
 
@@ -174,17 +247,17 @@ class SeriesController extends AbstractController
 
             $seasons[$season->getnumber()] = $query->getResult();
         }
-        $form = $this->createForm(RatingFormType::class, [
+        $ratingform = $this->createForm(RatingFormType::class, [
             'serie_show' => $series,
             'user_show' => $user,
         ]);
         if ($user != null) {
             $suivie = in_array($series, $user->getSeries()->toArray());
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $value = $form['value']->getData();
-                $comment = $form['comment']->getData();
-                $date = $form['date']->getData();
+            $ratingform->handleRequest($request);
+            if ($ratingform->isSubmitted() && $ratingform->isValid()) {
+                $value = $ratingform['value']->getData();
+                $comment = $ratingform['comment']->getData();
+                $date = $ratingform['date']->getData();
 
                 $rating = new Rating();
                 $rating->setValue($value);
@@ -208,7 +281,7 @@ class SeriesController extends AbstractController
             'suivie' => $suivie,
             'ytbcode' => $ytbcode,
             'imdbcode' => $imdbcode,
-            'ratingform' => $form->createView()
+            'ratingform' => $ratingform->createView()
         ]);
     }
 

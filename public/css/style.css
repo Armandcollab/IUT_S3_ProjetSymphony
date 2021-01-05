@@ -34,10 +34,38 @@ h1 {
     overflow: hidden;
 }
 
-.filters-container {
+.categories-container {
     background-color: #4D4D4D;
-    border-radius: 10px;
     overflow: hidden;
+    display: flex;
+    flex-wrap: nowrap;
+    width: fit-content;
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.categories-container button {
+    background-color: #FA314A;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.categories-container select {
+    width: 100%;
+    position: relative;
+}
+
+.categories-container>* {
+    margin: 0.5rem;
 }
 
 #myBtnContainer {

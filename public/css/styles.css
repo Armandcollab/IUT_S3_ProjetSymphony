@@ -21,9 +21,20 @@
 }
 
 .filters-container {
-    background-color: gray;
+    background-color: red;
     border-radius: 10px;
     overflow: hidden;
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 2rem;
+}
+
+.categories-container {
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 2rem;
 }
 
 #myBtnContainer {
