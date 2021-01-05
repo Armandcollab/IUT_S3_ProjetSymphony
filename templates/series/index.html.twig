@@ -34,7 +34,6 @@
 			<br>
 			<br>
 
-<<<<<<< HEAD
 
 			{{ form_end(searchform) }}
 			<br>
@@ -77,49 +76,6 @@
 		</nav>
 	</div>
 
-=======
-
-			{{ form_end(searchform) }}
-			<br>
-			{{ form_start(categoriesform) }}
-			{% for genre in categoriesform.genres %}
-				<div>
-					{{ form_errors(genre) }}
-					{{ form_row(genre.name) }}
-				</div>
-			{% endfor %}
-			{{ form_end(categoriesform) }}
-			<br>
-
-			{% if id > 0 %}
-				<button type="button">
-					<a href="
-																					{% if search == NULL %}
-																					{{ path(page, {'id': id - 1}) }}
-																						{% else %}
-																					{{ path(page, {'id': id - 1, 'search' : search}) }}
-																					{% endif %}
-																					">Page précédente</a>
-				</button>
-			{% endif %}
-
-			{% if id < size/10 - 1 %}
-				<button type="button">
-					<a href="
-																					{% if search == NULL %}
-																					{{ path(page, {'id': id + 1}) }}
-																						{% else %}
-																					{{ path(page, {'id': id + 1, 'search' : search}) }}
-																					{% endif %}
-																					">Page suivante</a>
-				</button>
-			{% endif %}
-			<p>{{ size }}
-				références</p>
-		</nav>
-	</div>
-
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
 	<main class="series-list">
 
 

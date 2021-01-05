@@ -2,10 +2,7 @@
 
 namespace App\Controller;
 
-<<<<<<< HEAD
 use App\Entity\Country;
-=======
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
 use App\Entity\User;
 use App\Entity\Genre;
 use App\Entity\Rating;
@@ -14,10 +11,6 @@ use App\Entity\Series;
 use App\Form\RatingFormType;
 use App\Form\SearchBarFormType;
 use Doctrine\ORM\EntityManager;
-<<<<<<< HEAD
-=======
-use App\Form\CategoriesFormType;
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
 use Doctrine\ORM\EntityRepository;
 use App\Repository\SearchRepository;
 use Doctrine\Persistence\ObjectManager;
@@ -97,17 +90,12 @@ class SeriesController extends AbstractController
 
     public function series($query, Int $id, $pages): Response
     {
-<<<<<<< HEAD
         // Get genre list
-=======
-
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
         $genres = $this->getDoctrine()
             ->getRepository(Genre::class)
             ->createQueryBuilder('genres')
             ->getQuery()
             ->execute();
-<<<<<<< HEAD
         // Get country list
         $countries = $this->getDoctrine()
             ->getRepository(Country::class)
@@ -117,28 +105,17 @@ class SeriesController extends AbstractController
         // Build form from list of genre entites
         $i = 0;
         foreach ($genres as $genre) {
-=======
-
-        $i = 0;
-        foreach ($genres as $genre) {
-            /* @var $genre Genre */
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
             $formBuilder = $this->get('form.factory')->createNamedBuilder($i, FormType::class, $genres);
             $formBuilder
                 ->add('genres', EntityType::class, [
                     'class' => 'App\Entity\Genre',
                     'required' => true,
-<<<<<<< HEAD
-=======
-                    'label' => $genre->getName()
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
                 ])
                 ->add('submit', SubmitType::class, array(
                     'label' => 'Appliquer',
                 ));
             $i++;
         }
-<<<<<<< HEAD
         // Get categories form
         $categoriesform = $formBuilder->getForm();
         $i = 0;
@@ -163,23 +140,12 @@ class SeriesController extends AbstractController
         $countriesform->handleRequest(Request::createFromGlobals());
         $searchform->handleRequest(Request::createFromGlobals());
         // Define GET values
-=======
-        $categoriesform = $formBuilder
-            ->getForm();
-        //
-        $searchform = $this->createForm(SearchBarFormType::class);
-        $categoriesform->handleRequest(Request::createFromGlobals());
-        $searchform->handleRequest(Request::createFromGlobals());
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
         $selectedgenre = false;
         $search = false;
         $note = null; //TODO checkbox bastien ;)
         $desc = null; //TODO checkbox
-<<<<<<< HEAD
 
         // handle form if submitted
-=======
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
         if ($searchform->isSubmitted() && $searchform->isValid()) {
             $search = $searchform->getData()->getTitle();
 
@@ -224,35 +190,13 @@ class SeriesController extends AbstractController
             ->getQuery()
             ->execute());
 
-<<<<<<< HEAD
         // Filters results for the layout of series (10 series per page)
-=======
-        if ($categoriesform->isSubmitted() && $categoriesform->isValid()) {
-            $selectedgenre = new Genre();
-            $selectedgenre = $categoriesform['genres']->getData();
-            return $this->redirectToRoute($pages, array('id' => 0, 'selectedgenre' => $selectedgenre->getName(), 'note' => $note, 'desc' => $desc));
-        }else if (isset($_GET['selectedgenre'])) {
-            $selectedgenre = $_GET['selectedgenre'];
-        }
-
-       
-        if ($selectedgenre != false) {
-            $query->innerJoin('series.genre', 'genre')
-                ->andwhere('genre.name LIKE :genreName')
-                ->setParameter('genreName', $selectedgenre );
-        }
-
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
         $series = $query
             ->setMaxResults(10)
             ->setFirstResult($id * 10)
             ->getQuery()
             ->execute();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
@@ -261,10 +205,7 @@ class SeriesController extends AbstractController
             'page' => $pages,
             'searchform' => $searchform->createView(),
             'categoriesform' => $categoriesform->createView(),
-<<<<<<< HEAD
             'countriesform' => $countriesform->createView(),
-=======
->>>>>>> 635f4673bd34839c1a2bce77f4dc44b6564d485a
             'search' => $search,
             'genres' => $genres
         ]);
