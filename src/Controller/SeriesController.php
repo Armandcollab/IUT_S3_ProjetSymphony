@@ -414,11 +414,7 @@ class SeriesController extends AbstractController
             'ratingform' => $ratingform->createView(),
             'ratings' => $ratings,
             'userrating' => $userrating,
-<<<<<<< HEAD
             'adminDelForms' => $adminDelForms
-=======
-            'user' => $user
->>>>>>> 47924345f6f6a51525394321439366b12f843f2e
         ]);
     }
 

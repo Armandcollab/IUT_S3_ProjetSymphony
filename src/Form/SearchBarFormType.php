@@ -25,12 +25,12 @@ class SearchBarFormType extends AbstractType
             ->add('note', CheckboxType::class, [
                 'label' => 'par note',
                 'required' => false,
-                'mapped' => false
+                'mapped' => false,
             ])
             ->add('decroissant', CheckboxType::class, [
                 'label' => 'décroissant',
                 'required' => false,
-                'mapped' => false
+                'mapped' => false,
             ]);
     }
 }

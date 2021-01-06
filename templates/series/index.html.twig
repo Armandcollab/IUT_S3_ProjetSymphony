@@ -19,54 +19,64 @@
 		<nav class="searchform">
 			{% if app.user and app.request.get('_route') == 'series_followed'%}
 
-				<h1>Voici les séries que vous suivez !</h1>
+				<h2>Voici les séries que vous suivez !</h2>
 			{% else %}
-				<h1>Consulter l'ensemble des séries</h1>
+				<h2>Consulter l'ensemble des séries</h2>
 			{% endif %}
 			<p>
 				<b>Recherche par titre</b>
 			</p>
-
-			{{ form_start(searchform) }}
 			{{ form_widget(searchform.title) }}
-			<br>
-			<br>
+			{{ form_start(searchform) }}
+			<div class="filters-container">
+				<div class="search-container">
 
 
-			{{ form_end(searchform) }}
-			<br>
-			<div class="categories-container">
-				{{ form_start(categoriesform) }}
-				{{ form_widget(categoriesform.genres) }}
-				{{ form_end(categoriesform) }}
+					<p>
+						Trier par notes croissantes</p>
+					{{ form_widget(searchform.note) }}
+					<p>
+						Trier par notes décroissantes</p>
+					{{ form_widget(searchform.decroissant) }}
+
+				</div>
+				{{ form_end(searchform) }}
 				<br>
-				{{ form_start(countriesform) }}
-				{{ form_widget(countriesform.countries) }}
-				{{ form_end(countriesform) }}
-				<br>
+				<div class="categories-container">
+					{{ form_start(categoriesform) }}
+					<p>Genres :</p>
+					{{ form_widget(categoriesform.genres) }}
+					{{ form_end(categoriesform) }}
+					<br>
+					{{ form_start(countriesform) }}
+					<p>Pays :</p>
+					{{ form_widget(countriesform.countries) }}
+					{{ form_end(countriesform) }}
+					<br>
+				</div>
 			</div>
 
 			{% if id > 0 %}
 				<button type="button">
 					<a href="
-						{% if search == NULL %}
-						{{ path(page, {'id': id - 1}) }}
-						{% else %}
-						{{ path(page, {'id': id - 1, 'search' : search}) }}
-						{% endif %}
-						">Page précédente</a>
+																								{% if search == NULL %}
+																								{{ path(page, {'id': id - 1}) }}
+																								{% else %}
+																								{{ path(page, {'id': id - 1, 'search' : search}) }}
+																								{% endif %}
+																								">Page précédente</a>
 				</button>
 			{% endif %}
 
 			{% if id < size/10 - 1 %}
 				<button type="button">
 					<a href="
-						{% if search == NULL %}
-						{{ path(page, {'id': id + 1}) }}
-						{% else %}
-						{{ path(page, {'id': id + 1, 'search' : search}) }}
-						{% endif %}
-						">Page suivante</a>
+																								{% if search == NULL %}
+																								{{ path(page, {'id': id + 1}) }}
+																								{% else %}
+																								{{ path(page, {'id': id + 1, 'search' : search}) }}
+																								{% endif %}
+																								">Page suivante</a>
 				</button>
 			{% endif %}
 			<p>{{ size }}
@@ -127,7 +137,7 @@
 	{% endfor %}
 </main>
 {% block footer   %}
-	<footer class="footer primary">
+	<footer class="footer primary" style="position:relative">
 		Copyright © 2020
 	</footer>
 {% endblock %}{% endblock %}

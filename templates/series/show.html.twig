@@ -84,7 +84,7 @@
 					<ul>
 						{% for episode in season %}
 							<li>{{episode.title}}
-								{% if user in episode.user %}
+								{% if app.user in episode.user %}
 									<a href="{{ path('episode_unfollow', {'id' : episode.id } ) }}">
 										✅
 									</a>
@@ -130,14 +130,9 @@
 				</div>
 
 
-<<<<<<< HEAD
 			{% endfor %}<br></td>
 	</td>
 </tr></td></tr>{% if app.user and userrating == null %}<tr>
-=======
-		{% endfor %}<br></td>
-</tr></td></tr>{% if app.user %}<tr>
->>>>>>> 47924345f6f6a51525394321439366b12f843f2e
 <th>Suivie</th>
 <td>
 	{% if suivie %}
