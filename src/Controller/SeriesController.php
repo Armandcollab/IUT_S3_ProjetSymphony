@@ -2,20 +2,20 @@
 
 namespace App\Controller;
 
-use App\Entity\Country;
 use App\Entity\User;
 use App\Entity\Genre;
 use App\Entity\Rating;
 use App\Entity\Season;
 use App\Entity\Series;
+use App\Entity\Country;
 use App\Form\RatingFormType;
 use App\Form\SearchBarFormType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use App\Repository\SearchRepository;
 use Doctrine\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormBuilder;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -126,6 +127,20 @@ class SeriesController extends AbstractController
             $i++;
         }
 
+        return $formBuilder;
+    }
+
+    public function getAdminCommentForm($id): FormBuilder
+    {
+        $formBuilder = $this->get('form.factory')->createBuilder(FormType::class);
+        $formBuilder
+            ->add('submit', SubmitType::class, array(
+                'label' => 'Supprimer',
+                'attr' => array('class' => 'btn deletebtn')
+            ))
+            ->add('rid', HiddenType::class, array(
+                'data' => $id
+            ));
         return $formBuilder;
     }
 
@@ -288,20 +303,21 @@ class SeriesController extends AbstractController
         // Try to recover already existing rating
 
         $userrating = true;
-        if (null != $user){
-        $userrating = $this->getDoctrine()
-            ->getRepository(Rating::class)
-            ->createQueryBuilder('rating')
-            ->innerJoin('rating.series', 'series')
-            ->innerJoin('rating.user', 'user')
-            ->andwhere('series.id LIKE :serieID')
-            ->setParameter('serieID', $id)
-            ->andwhere('user.id LIKE :userID')
-            ->setParameter('userID', $user->getId())
-            ->getQuery()
-            ->execute();
+        if (null != $user) {
+            $userrating = $this->getDoctrine()
+                ->getRepository(Rating::class)
+                ->createQueryBuilder('rating')
+                ->innerJoin('rating.series', 'series')
+                ->innerJoin('rating.user', 'user')
+                ->andwhere('series.id LIKE :serieID')
+                ->setParameter('serieID', $id)
+                ->andwhere('user.id LIKE :userID')
+                ->setParameter('userID', $user->getId())
+                ->getQuery()
+                ->execute();
         }
         $request = Request::createFromGlobals();
+
 
 
         $query = $em->createQuery("SELECT s
@@ -347,6 +363,34 @@ class SeriesController extends AbstractController
                 return $this->redirect($request->getUri());
             }
         }
+        $adminDelForms = array();
+
+        if ($user != null && $user->getAdmin() == 1 && $ratings != null) {
+
+
+            foreach ($ratings as $rating) {
+
+                $adminDelForms[$rating->getId()] = $this->getAdminCommentForm($rating->getId())->getForm();
+                $adminDelForms[$rating->getId()]->handleRequest(Request::createFromGlobals());
+            }
+            foreach ($adminDelForms as $adminform) {
+
+                if ($adminform->isSubmitted() && $adminform->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $Repo = $em->getRepository(Rating::class);
+                    $identifiant = $rating->getId();
+                    $delrating = $Repo->find($identifiant);
+
+                    $em->remove($delrating);
+                    $em->flush($delrating);
+                    return $this->redirect($request->getUri());
+                }
+            }
+            $adminDelForms[$rating->getId()] = $adminDelForms[$rating->getId()]->createView();
+        }
+
+
+
 
         $ytbcode = substr($series->getYoutubeTrailer(), strpos($series->getYoutubeTrailer(), "=") + 1);
         $imdbcode = $series->getImdb();
@@ -358,7 +402,8 @@ class SeriesController extends AbstractController
             'imdbcode' => $imdbcode,
             'ratingform' => $ratingform->createView(),
             'ratings' => $ratings,
-            'userrating' => $userrating
+            'userrating' => $userrating,
+            'adminDelForms' => $adminDelForms
         ]);
     }
 

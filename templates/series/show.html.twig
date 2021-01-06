@@ -114,15 +114,14 @@
 
 				<p>
 					{{ rating.comment}}</p>
-				{% if app.user.getAdmin() == 1 %}
+				{% if app.user and app.user.getAdmin() == 1 %}
 
-					<button type="button" class="btn deletebtn">Delete</button>
-
-				{% endif %}
-			</div>
+					{{ form(adminDelForms[rating.id]) }}{% endif %}
+				</div>
 
 
-		{% endfor %}<br></td>
+			{% endfor %}<br></td>
+	</td>
 </tr></td></tr>{% if app.user and userrating == null %}<tr>
 <th>Suivie</th>
 <td>
@@ -144,6 +143,6 @@
 	{{ form_widget(ratingform.comment) }}
 	{{ form_end(ratingform) }}
 	<br>
-</td></tr>{% elseif userrating != null %}<th>Votre évalutation</th><td>
+</td></tr>{% elseif app.user and userrating != null %}<th>Votre évalutation</th><td>
 <p>
 	Vous avez déjà noté cette série</p></td>{% endif %}</tr></tbody></td></tr></tbody></table><a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>{% endblock %}

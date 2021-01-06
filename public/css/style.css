@@ -81,6 +81,7 @@ h1 {
     border: none;
     outline: none;
     padding: 12px 16px;
+    font-size: 0.9rem;
     background-color: #f1f1f1;
     cursor: pointer;
     margin: 1rem;
@@ -239,7 +240,7 @@ a {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    background-color: #4D4D4D;
+    background-color: #262626;
 }
 
 .serie-title {
@@ -259,7 +260,8 @@ a {
 }
 
 .serie-content {
-    background: rgba(0, 0, 0, 0.5);
+    background-color: #262626;
+    ;
 }
 
 .serie-description {
