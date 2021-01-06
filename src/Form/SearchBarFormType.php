@@ -20,32 +20,17 @@ class SearchBarFormType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'required'=>false,
-                'mapped'=> true,
-            ])
-            ->add('filters', CheckboxType::class, [
-                'label' => 'Filtres avancées',
-                'required' => false,
-                'mapped' => false,
-                'attr' => ['onclick' => 'filterSettingChecked()']
+                'mapped'=> false,
             ])
             ->add('note', CheckboxType::class, [
                 'label' => 'par note',
                 'required' => false,
-                'mapped' => false,
-                'attr' => ['onclick' => 'FilterRatingChecked()']
+                'mapped' => false
             ])
             ->add('decroissant', CheckboxType::class, [
                 'label' => 'décroissant',
                 'required' => false,
-                'mapped' => false,
-                'attr' => ['onclick' => 'FilterRatingDESCChecked()']
+                'mapped' => false
             ]);
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Series::class,
-        ]);
     }
 }

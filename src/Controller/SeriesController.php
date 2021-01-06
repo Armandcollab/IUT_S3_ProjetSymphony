@@ -93,7 +93,8 @@ class SeriesController extends AbstractController
 
     /** Calles in series() */
 
-    public function getCategoriesForm($genres): FormBuilder{
+    public function getCategoriesForm($genres): FormBuilder
+    {
         $i = 0;
         foreach ($genres as $genre) {
             $formBuilder = $this->get('form.factory')->createNamedBuilder($i++, FormType::class, $genres);
@@ -109,7 +110,8 @@ class SeriesController extends AbstractController
         return $formBuilder;
     }
 
-    public function getCountriesForm($countries): FormBuilder{
+    public function getCountriesForm($countries): FormBuilder
+    {
         $i = 0;
         foreach ($countries as $country) {
             $formBuilder = $this->get('form.factory')->createNamedBuilder($i++, FormType::class, $countries);
@@ -125,13 +127,15 @@ class SeriesController extends AbstractController
         return $formBuilder;
     }
 
-    public function reload($pages,$id,$selectedgenre,$selectedcountry,$search,$note,$desc){
+    public function reload($pages, $id, $selectedgenre, $selectedcountry, $search, $note, $desc)
+    {
         $nameCountry = (isset($selectedcountry) ? $selectedcountry->getName() : null);
         $nameGenre = (isset($selectedgenre) ? $selectedgenre->getName() : null);
-        return $this->redirectToRoute($pages, array('id' => $id,'selectedcountry' => $nameCountry, 'selectedgenre' => $nameGenre,'search' => $search, 'note' => $note, 'desc' => $desc));
+        return $this->redirectToRoute($pages, array('id' => $id, 'selectedcountry' => $nameCountry, 'selectedgenre' => $nameGenre, 'search' => $search, 'note' => $note, 'desc' => $desc));
     }
 
-    public function getElements(String $nameQueryBuilder, $class) : array {
+    public function getElements(String $nameQueryBuilder, $class): array
+    {
         return $this->getDoctrine()
             ->getRepository($class)
             ->createQueryBuilder($nameQueryBuilder)
@@ -139,12 +143,13 @@ class SeriesController extends AbstractController
             ->execute();
     }
 
-    public function modifieQuery($selected,$query,String $entity){
+    public function modifieQuery($selected, $query, String $entity)
+    {
         if ($selected != false) {
-            $series = 'series.'.$entity;
-            $name = $entity.'.name';
+            $series = 'series.' . $entity;
+            $name = $entity . '.name';
             $query->innerJoin($series, $entity)
-                ->andwhere($name.' LIKE :Name')
+                ->andwhere($name . ' LIKE :Name')
                 ->setParameter('Name', $selected);
         }
     }
@@ -154,14 +159,14 @@ class SeriesController extends AbstractController
     public function series($query, Int $id, $pages): Response
     {
         // Get genre list
-        $genres = $this->getElements("genres",Genre::class);
+        $genres = $this->getElements("genres", Genre::class);
         // Get country list
         $countries = $this->getElements("countries", Country::class);
-                
+
         // Get categories form
         $formBuilder = $this->getCategoriesForm($genres);
         $categoriesform = $formBuilder->getForm();
-        
+
         // Get countries form getCountriesForm
         $formBuilder = $this->getCountriesForm($countries);
         $countriesform = $formBuilder->getForm();
@@ -176,14 +181,16 @@ class SeriesController extends AbstractController
         $selectedgenre = false;
         $selectedcountry = false;
         $search = false;
-        $note = null; //TODO checkbox bastien ;)
-        $desc = null; //TODO checkbox
+        $note = null;
+        $desc = null;
 
         // handle form if submitted
         if ($searchform->isSubmitted() && $searchform->isValid()) {
-            $search = $searchform->getData()->getTitle();
+            $search = $searchform['title']->getData();
+            $note = ($searchform['note']->getData() ? true : null);
+            $desc = ($searchform['decroissant']->getData() ? true : null);
 
-            return $this->reload($pages,0,null,null,$search, $note,$desc);
+            return $this->reload($pages, 0, null, null, $search, $note, $desc);
         }
 
         $search = (isset($_GET['search']) ? $_GET['search'] : false);
@@ -201,7 +208,7 @@ class SeriesController extends AbstractController
         if ($categoriesform->isSubmitted() && $categoriesform->isValid()) {
             $selectedgenre = new Genre();
             $selectedgenre = $categoriesform['genres']->getData();
-            return $this->reload($pages,0,$selectedgenre,null,null,$note,$desc);
+            return $this->reload($pages, 0, $selectedgenre, null, null, $note, $desc);
         } else if (isset($_GET['selectedgenre'])) {
             $selectedgenre = $_GET['selectedgenre'];
         }
@@ -210,7 +217,7 @@ class SeriesController extends AbstractController
         if ($countriesform->isSubmitted() && $countriesform->isValid()) {
             $selectedcountry = new Country();
             $selectedcountry = $countriesform['countries']->getData();
-            return $this->reload($pages,0,null,$selectedcountry,null,$note,$desc);
+            return $this->reload($pages, 0, null, $selectedcountry, null, $note, $desc);
         } else if (isset($_GET['selectedcountry'])) {
             $selectedcountry = $_GET['selectedcountry'];
         }
@@ -221,9 +228,9 @@ class SeriesController extends AbstractController
             $query->andWhere('series.title LIKE :searchTerm')
                 ->setParameter('searchTerm', '%' . $search . '%');
         }
-        
-        $this->modifieQuery($selectedgenre,$query,"genre");
-        $this->modifieQuery($selectedcountry,$query,"country");
+
+        $this->modifieQuery($selectedgenre, $query, "genre");
+        $this->modifieQuery($selectedcountry, $query, "country");
 
         // Get number of elements outputed by query
         $size = count($query
