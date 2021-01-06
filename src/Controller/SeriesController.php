@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityRepository;
 use App\Repository\SearchRepository;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -179,6 +180,7 @@ class SeriesController extends AbstractController
         $searchform->handleRequest(Request::createFromGlobals());
         // Define GET values
         $selectedgenre = false;
+        $selectedcountry = false;
         $search = false;
         $note = null;
         $desc = null;
@@ -285,6 +287,8 @@ class SeriesController extends AbstractController
 
         // Try to recover already existing rating
 
+        $userrating = true;
+        if (null != $user){
         $userrating = $this->getDoctrine()
             ->getRepository(Rating::class)
             ->createQueryBuilder('rating')
@@ -296,7 +300,7 @@ class SeriesController extends AbstractController
             ->setParameter('userID', $user->getId())
             ->getQuery()
             ->execute();
-
+        }
         $request = Request::createFromGlobals();
 
 
@@ -367,7 +371,7 @@ class SeriesController extends AbstractController
     }
 
     /**
-     * @Route("/follow/{id}", name="series_follow", methods={"GET"})
+     * @Route("/follow/{id}", name="series_follow", methods={"GET","POST"})
      */
     public function follow(Series $serie, UserInterface $user): Response
     {
