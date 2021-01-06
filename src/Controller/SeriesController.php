@@ -13,6 +13,7 @@ use App\Form\SearchBarFormType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use App\Repository\SearchRepository;
+use Symfony\Component\Form\FormBuilder;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -88,24 +89,14 @@ class SeriesController extends AbstractController
         return $this->series($query, $id, 'series_page_followed');
     }
 
-    public function series($query, Int $id, $pages): Response
-    {
-        // Get genre list
-        $genres = $this->getDoctrine()
-            ->getRepository(Genre::class)
-            ->createQueryBuilder('genres')
-            ->getQuery()
-            ->execute();
-        // Get country list
-        $countries = $this->getDoctrine()
-            ->getRepository(Country::class)
-            ->createQueryBuilder('countries')
-            ->getQuery()
-            ->execute();
-        // Build form from list of genre entites
+
+
+    /** Calles in series() */
+
+    public function getCategoriesForm($genres): FormBuilder{
         $i = 0;
         foreach ($genres as $genre) {
-            $formBuilder = $this->get('form.factory')->createNamedBuilder($i, FormType::class, $genres);
+            $formBuilder = $this->get('form.factory')->createNamedBuilder($i++, FormType::class, $genres);
             $formBuilder
                 ->add('genres', EntityType::class, [
                     'class' => 'App\Entity\Genre',
@@ -114,13 +105,14 @@ class SeriesController extends AbstractController
                 ->add('submit', SubmitType::class, array(
                     'label' => 'Appliquer',
                 ));
-            $i++;
         }
-        // Get categories form
-        $categoriesform = $formBuilder->getForm();
+        return $formBuilder;
+    }
+
+    public function getCountriesForm($countries): FormBuilder{
         $i = 0;
         foreach ($countries as $country) {
-            $formBuilder = $this->get('form.factory')->createNamedBuilder($i, FormType::class, $countries);
+            $formBuilder = $this->get('form.factory')->createNamedBuilder($i++, FormType::class, $countries);
             $formBuilder
                 ->add('countries', EntityType::class, [
                     'class' => 'App\Entity\Country',
@@ -129,9 +121,49 @@ class SeriesController extends AbstractController
                 ->add('submit', SubmitType::class, array(
                     'label' => 'Appliquer',
                 ));
-            $i++;
         }
-        // Get countries form
+        return $formBuilder;
+    }
+
+    public function reload($pages,$id,$selectedgenre,$selectedcountry,$search,$note,$desc){
+        $nameCountry = (isset($selectedcountry) ? $selectedcountry->getName() : null);
+        $nameGenre = (isset($selectedgenre) ? $selectedgenre->getName() : null);
+        return $this->redirectToRoute($pages, array('id' => $id,'selectedcountry' => $nameCountry, 'selectedgenre' => $nameGenre,'search' => $search, 'note' => $note, 'desc' => $desc));
+    }
+
+    public function getElements(String $nameQueryBuilder, $class) : array {
+        return $this->getDoctrine()
+            ->getRepository($class)
+            ->createQueryBuilder($nameQueryBuilder)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function modifieQuery($selected,$query,String $entity){
+        if ($selected != false) {
+            $series = 'series.'.$entity;
+            $name = $entity.'.name';
+            $query->innerJoin($series, $entity)
+                ->andwhere($name.' LIKE :Name')
+                ->setParameter('Name', $selected);
+        }
+    }
+
+
+
+    public function series($query, Int $id, $pages): Response
+    {
+        // Get genre list
+        $genres = $this->getElements("genres",Genre::class);
+        // Get country list
+        $countries = $this->getElements("countries", Country::class);
+                
+        // Get categories form
+        $formBuilder = $this->getCategoriesForm($genres);
+        $categoriesform = $formBuilder->getForm();
+        
+        // Get countries form getCountriesForm
+        $formBuilder = $this->getCountriesForm($countries);
         $countriesform = $formBuilder->getForm();
 
         // Forms : handle request
@@ -139,8 +171,10 @@ class SeriesController extends AbstractController
         $categoriesform->handleRequest(Request::createFromGlobals());
         $countriesform->handleRequest(Request::createFromGlobals());
         $searchform->handleRequest(Request::createFromGlobals());
-        // Define GET values
+
+        // Define GET default values 
         $selectedgenre = false;
+        $selectedcountry = false;
         $search = false;
         $note = null; //TODO checkbox bastien ;)
         $desc = null; //TODO checkbox
@@ -149,10 +183,11 @@ class SeriesController extends AbstractController
         if ($searchform->isSubmitted() && $searchform->isValid()) {
             $search = $searchform->getData()->getTitle();
 
-            return $this->redirectToRoute($pages, array('id' => 0, 'search' => $search, 'note' => $note, 'desc' => $desc));
-        } else if (isset($_GET['search'])) {
-            $search = $_GET['search'];
+            return $this->reload($pages,0,null,null,$search, $note,$desc);
         }
+
+        $search = (isset($_GET['search']) ? $_GET['search'] : false);
+
         if (isset($_GET['note'])) {
             $query->innerJoin(Rating::class, 'r', 'WITH', 'r.series = series.id');
             if (isset($_GET['desc'])) {
@@ -162,14 +197,23 @@ class SeriesController extends AbstractController
             }
         }
 
+        //Catégories
         if ($categoriesform->isSubmitted() && $categoriesform->isValid()) {
             $selectedgenre = new Genre();
             $selectedgenre = $categoriesform['genres']->getData();
-            return $this->redirectToRoute($pages, array('id' => 0, 'selectedgenre' => $selectedgenre->getName(), 'note' => $note, 'desc' => $desc));
+            return $this->reload($pages,0,$selectedgenre,null,null,$note,$desc);
         } else if (isset($_GET['selectedgenre'])) {
             $selectedgenre = $_GET['selectedgenre'];
         }
-        //
+
+        //Countries
+        if ($countriesform->isSubmitted() && $countriesform->isValid()) {
+            $selectedcountry = new Country();
+            $selectedcountry = $countriesform['countries']->getData();
+            return $this->reload($pages,0,null,$selectedcountry,null,$note,$desc);
+        } else if (isset($_GET['selectedcountry'])) {
+            $selectedcountry = $_GET['selectedcountry'];
+        }
 
         // Verify if GET values are set to change final query according to desired values
 
@@ -177,15 +221,11 @@ class SeriesController extends AbstractController
             $query->andWhere('series.title LIKE :searchTerm')
                 ->setParameter('searchTerm', '%' . $search . '%');
         }
-
-        if ($selectedgenre != false) {
-            $query->innerJoin('series.genre', 'genre')
-                ->andwhere('genre.name LIKE :genreName')
-                ->setParameter('genreName', $selectedgenre);
-        }
+        
+        $this->modifieQuery($selectedgenre,$query,"genre");
+        $this->modifieQuery($selectedcountry,$query,"country");
 
         // Get number of elements outputed by query
-
         $size = count($query
             ->getQuery()
             ->execute());
@@ -228,13 +268,11 @@ class SeriesController extends AbstractController
 
         $request = Request::createFromGlobals();
 
-
         $query = $em->createQuery("SELECT s
         FROM App:Season s
         INNER JOIN App:Series ss WITH s.series = ss.id
         WHERE s.series = $id
         ORDER BY s.number");
-
         $seasonss = $query->getResult();
 
         foreach ($seasonss as $season) {
@@ -247,6 +285,7 @@ class SeriesController extends AbstractController
 
             $seasons[$season->getnumber()] = $query->getResult();
         }
+
         $ratingform = $this->createForm(RatingFormType::class, [
             'serie_show' => $series,
             'user_show' => $user,
@@ -305,6 +344,7 @@ class SeriesController extends AbstractController
 
         return $this->show($serie);
     }
+
 
 
     /**
