@@ -86,6 +86,10 @@ h1 {
     margin: 1rem;
 }
 
+.deletebtn {
+    background-color: #f44336;
+}
+
 .btn label {
     font-size: 1rem;
 }
@@ -199,6 +203,23 @@ a {
 
 .navbar-brand {
     margin: 1rem;
+}
+
+.user-rating {
+    padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin: 0.5rem;
+    background-color: #262626;
+    color: white;
+}
+
+.checked {
+    color: #FFCA15;
+}
+
+.unchecked {
+    color: black;
 }
 
 .episodes {
