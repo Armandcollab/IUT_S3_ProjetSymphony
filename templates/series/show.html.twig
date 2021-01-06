@@ -83,7 +83,17 @@
 				<div class="episodes">
 					<ul>
 						{% for episode in season %}
-							<li>{{episode.title}}</li>
+							<li>{{episode.title}}
+								{% if user in episode.user %}
+									<a href="{{ path('episode_unfollow', {'id' : episode.id } ) }}">
+										✅
+									</a>
+								{% else %}
+									<a href="{{ path('episode_follow', {'id' : episode.id } ) }}">
+										❌
+									</a>
+								{% endif %}
+							</li>
 
 						{% endfor %}
 					</ul>
@@ -123,7 +133,7 @@
 
 
 		{% endfor %}<br></td>
-</tr></td></tr>{% if app.user and userrating == null %}<tr>
+</tr></td></tr>{% if app.user %}<tr>
 <th>Suivie</th>
 <td>
 	{% if suivie %}
@@ -131,10 +141,12 @@
 			✅
 		</a>
 	{% else %}
-		<a href="{{ path('series_follow', {'id' : series.id } ) }}">❌
+		<a href="{{ path('series_follow', {'id' : series.id } ) }}">
+			❌
 		</a>
 	{% endif %}
 </td></tr><tr>
+
 <th>Notez la série !</th>
 <td>
 	{{ form_start(ratingform) }}

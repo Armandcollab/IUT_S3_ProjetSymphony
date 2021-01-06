@@ -6,7 +6,7 @@ use App\Entity\Country;
 use App\Entity\User;
 use App\Entity\Genre;
 use App\Entity\Rating;
-use App\Entity\Season;
+use App\Entity\Episode;
 use App\Entity\Series;
 use App\Form\RatingFormType;
 use App\Form\SearchBarFormType;
@@ -288,18 +288,18 @@ class SeriesController extends AbstractController
         // Try to recover already existing rating
 
         $userrating = true;
-        if (null != $user){
-        $userrating = $this->getDoctrine()
-            ->getRepository(Rating::class)
-            ->createQueryBuilder('rating')
-            ->innerJoin('rating.series', 'series')
-            ->innerJoin('rating.user', 'user')
-            ->andwhere('series.id LIKE :serieID')
-            ->setParameter('serieID', $id)
-            ->andwhere('user.id LIKE :userID')
-            ->setParameter('userID', $user->getId())
-            ->getQuery()
-            ->execute();
+        if (null != $user) {
+            $userrating = $this->getDoctrine()
+                ->getRepository(Rating::class)
+                ->createQueryBuilder('rating')
+                ->innerJoin('rating.series', 'series')
+                ->innerJoin('rating.user', 'user')
+                ->andwhere('series.id LIKE :serieID')
+                ->setParameter('serieID', $id)
+                ->andwhere('user.id LIKE :userID')
+                ->setParameter('userID', $user->getId())
+                ->getQuery()
+                ->execute();
         }
         $request = Request::createFromGlobals();
 
@@ -314,13 +314,24 @@ class SeriesController extends AbstractController
 
         foreach ($seasonss as $season) {
             $seasonId = $season->getId();
-            $query = $em->createQuery("SELECT e.title
-            FROM App:Episode e
-            INNER JOIN App:Season ss WITH e.season = ss.id
-            WHERE ss.id = $seasonId
-            ORDER BY e.number");
+            $query = $this->getDoctrine()
+                ->getRepository(Episode::class)
+                ->createQueryBuilder('e')
+                //->select('e','u')
+                ->innerJoin('e.season', 'ss')
+                //->leftJoin('e.user', 'u')
+                ->andwhere('e.season = ss.id')
+                //->andwhere('u.id = :userID')
+                //->orwhere('u.id is NULL')
+                ->andwhere('ss.id = :seasonID')
+                ->orderby('e.number')
+                ->setParameter('seasonID', $seasonId)
+                //->setParameter('userID', $user->getID())
+                ->getQuery()
+                ->execute();
 
-            $seasons[$season->getnumber()] = $query->getResult();
+            $seasons[$season->getnumber()] = $query;
+            dump($query);
         }
         $ratingform = $this->createForm(RatingFormType::class, [
             'serie_show' => $series,
@@ -358,7 +369,8 @@ class SeriesController extends AbstractController
             'imdbcode' => $imdbcode,
             'ratingform' => $ratingform->createView(),
             'ratings' => $ratings,
-            'userrating' => $userrating
+            'userrating' => $userrating,
+            'user' => $user
         ]);
     }
 
@@ -371,7 +383,7 @@ class SeriesController extends AbstractController
     }
 
     /**
-     * @Route("/follow/{id}", name="series_follow", methods={"GET","POST"})
+     * @Route("/follow/season/{id}", name="series_follow", methods={"GET","POST"})
      */
     public function follow(Series $serie, UserInterface $user): Response
     {
@@ -385,7 +397,7 @@ class SeriesController extends AbstractController
 
 
     /**
-     * @Route("/unfollow/{id}", name="series_unfollow", methods={"GET"})
+     * @Route("/unfollow/season/{id}", name="series_unfollow", methods={"GET"})
      */
     public function unfollow(Series $serie, UserInterface $user): Response
     {
@@ -395,5 +407,35 @@ class SeriesController extends AbstractController
         $em->flush();
 
         return $this->show($serie);
+    }
+
+
+
+    /**
+     * @Route("/follow/episode/{id}", name="episode_unfollow", methods={"GET","POST"})
+     */
+    public function follow_episode(Episode $episode, UserInterface $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userBD = $em->getRepository(User::class)->find($user->getId());
+        $userBD->removeEpisode($episode);
+        $em->flush();
+
+        
+        return $this->show($episode->getSeason()->getSeries());
+    }
+
+
+    /**
+     * @Route("/unfollow/episode/{id}", name="episode_follow", methods={"GET"})
+     */
+    public function unfollow_episode(Episode $episode, UserInterface $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userBD = $em->getRepository(User::class)->find($user->getId());
+        $userBD->addEpisode($episode);
+        $em->flush();
+        
+        return $this->show($episode->getSeason()->getSeries());
     }
 }
