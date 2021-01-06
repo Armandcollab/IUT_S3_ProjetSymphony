@@ -13,7 +13,6 @@ use App\Form\SearchBarFormType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use App\Repository\SearchRepository;
-use Symfony\Component\Form\FormBuilder;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -89,15 +88,13 @@ class SeriesController extends AbstractController
         return $this->series($query, $id, 'series_page_followed');
     }
 
-
-
     /** Calles in series() */
 
     public function getCategoriesForm($genres): FormBuilder
     {
         $i = 0;
         foreach ($genres as $genre) {
-            $formBuilder = $this->get('form.factory')->createNamedBuilder($i++, FormType::class, $genres);
+            $formBuilder = $this->get('form.factory')->createNamedBuilder($i, FormType::class, $genres);
             $formBuilder
                 ->add('genres', EntityType::class, [
                     'class' => 'App\Entity\Genre',
@@ -106,7 +103,9 @@ class SeriesController extends AbstractController
                 ->add('submit', SubmitType::class, array(
                     'label' => 'Appliquer',
                 ));
+            $i++;
         }
+
         return $formBuilder;
     }
 
@@ -114,7 +113,7 @@ class SeriesController extends AbstractController
     {
         $i = 0;
         foreach ($countries as $country) {
-            $formBuilder = $this->get('form.factory')->createNamedBuilder($i++, FormType::class, $countries);
+            $formBuilder = $this->get('form.factory')->createNamedBuilder($i, FormType::class, $countries);
             $formBuilder
                 ->add('countries', EntityType::class, [
                     'class' => 'App\Entity\Country',
@@ -123,7 +122,9 @@ class SeriesController extends AbstractController
                 ->add('submit', SubmitType::class, array(
                     'label' => 'Appliquer',
                 ));
+            $i++;
         }
+
         return $formBuilder;
     }
 
@@ -176,10 +177,8 @@ class SeriesController extends AbstractController
         $categoriesform->handleRequest(Request::createFromGlobals());
         $countriesform->handleRequest(Request::createFromGlobals());
         $searchform->handleRequest(Request::createFromGlobals());
-
-        // Define GET default values 
+        // Define GET values
         $selectedgenre = false;
-        $selectedcountry = false;
         $search = false;
         $note = null;
         $desc = null;
@@ -191,10 +190,9 @@ class SeriesController extends AbstractController
             $desc = ($searchform['decroissant']->getData() ? true : null);
 
             return $this->reload($pages, 0, null, null, $search, $note, $desc);
+        } else if (isset($_GET['search'])) {
+            $search = $_GET['search'];
         }
-
-        $search = (isset($_GET['search']) ? $_GET['search'] : false);
-
         if (isset($_GET['note'])) {
             $query->innerJoin(Rating::class, 'r', 'WITH', 'r.series = series.id');
             if (isset($_GET['desc'])) {
@@ -204,10 +202,10 @@ class SeriesController extends AbstractController
             }
         }
 
-        //Catégories
         if ($categoriesform->isSubmitted() && $categoriesform->isValid()) {
             $selectedgenre = new Genre();
             $selectedgenre = $categoriesform['genres']->getData();
+
             return $this->reload($pages, 0, $selectedgenre, null, null, $note, $desc);
         } else if (isset($_GET['selectedgenre'])) {
             $selectedgenre = $_GET['selectedgenre'];
@@ -232,7 +230,9 @@ class SeriesController extends AbstractController
         $this->modifieQuery($selectedgenre, $query, "genre");
         $this->modifieQuery($selectedcountry, $query, "country");
 
+
         // Get number of elements outputed by query
+
         $size = count($query
             ->getQuery()
             ->execute());
@@ -261,6 +261,7 @@ class SeriesController extends AbstractController
 
 
 
+
     /**
      * @Route("/{id}", name="series_show", methods={"GET","POST"})
      */
@@ -272,14 +273,39 @@ class SeriesController extends AbstractController
 
         $id = $series->getId();
         $suivie = null;
+        // get ratings corresponding for this serie
+        $ratings = $this->getDoctrine()
+            ->getRepository(rating::class)
+            ->createQueryBuilder('ratings')
+            ->innerJoin('ratings.series', 'series')
+            ->andwhere('series.id LIKE :serieID')
+            ->setParameter('serieID', $id)
+            ->getQuery()
+            ->execute();
+
+        // Try to recover already existing rating
+
+        $userrating = $this->getDoctrine()
+            ->getRepository(Rating::class)
+            ->createQueryBuilder('rating')
+            ->innerJoin('rating.series', 'series')
+            ->innerJoin('rating.user', 'user')
+            ->andwhere('series.id LIKE :serieID')
+            ->setParameter('serieID', $id)
+            ->andwhere('user.id LIKE :userID')
+            ->setParameter('userID', $user->getId())
+            ->getQuery()
+            ->execute();
 
         $request = Request::createFromGlobals();
+
 
         $query = $em->createQuery("SELECT s
         FROM App:Season s
         INNER JOIN App:Series ss WITH s.series = ss.id
         WHERE s.series = $id
         ORDER BY s.number");
+
         $seasonss = $query->getResult();
 
         foreach ($seasonss as $season) {
@@ -292,12 +318,11 @@ class SeriesController extends AbstractController
 
             $seasons[$season->getnumber()] = $query->getResult();
         }
-
         $ratingform = $this->createForm(RatingFormType::class, [
             'serie_show' => $series,
             'user_show' => $user,
         ]);
-        if ($user != null) {
+        if ($user != null && $userrating == null) {
             $suivie = in_array($series, $user->getSeries()->toArray());
             $ratingform->handleRequest($request);
             if ($ratingform->isSubmitted() && $ratingform->isValid()) {
@@ -327,7 +352,9 @@ class SeriesController extends AbstractController
             'suivie' => $suivie,
             'ytbcode' => $ytbcode,
             'imdbcode' => $imdbcode,
-            'ratingform' => $ratingform->createView()
+            'ratingform' => $ratingform->createView(),
+            'ratings' => $ratings,
+            'userrating' => $userrating
         ]);
     }
 
@@ -351,7 +378,6 @@ class SeriesController extends AbstractController
 
         return $this->show($serie);
     }
-
 
 
     /**

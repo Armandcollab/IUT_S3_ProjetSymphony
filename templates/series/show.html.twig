@@ -6,8 +6,7 @@
 
 	{% if choices %}
 		{% for choice in choices %}
-			<input type="radio" id="rating_form_value_{{choice.label}}" name="rating_form[value]" 
-			class="star" required="required" value="{{choice.label}}"/>
+			<input type="radio" id="rating_form_value_{{choice.label}}" name="rating_form[value]" class="star" required="required" value="{{choice.label}}"/>
 		{% endfor %}
 	{% endif %}
 	<br>
@@ -94,30 +93,57 @@
 		</ul>
 	</td>
 </tr>
+<tr></tr>
 <tr>
-	{% if app.user %}
-		<th>Suivie</th>
-		<td>
-			{% if suivie %}
-				<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
-					✅
-				</a>
-			{% else %}
-				<a href="{{ path('series_follow', {'id' : series.id } ) }}">❌
-				</a>
-			{% endif %}
-		</td>
-		<tr>
-			<th>Votre évalutation</th>
-			<td>
-				{{ form_start(ratingform) }}
-				<p>Votre note :</p>
-				{{ form_widget(ratingform.value ) }}
-				<p>Votre avis :</p>
-				{{ form_widget(ratingform.comment) }}
-				{{ form_end(ratingform) }}
-				<br>
-			</td>
-		</tr>
+	<th>Les évaluations des internautes</th>
+	<td>
+		{% for rating in ratings %}
+			<div class="user-rating">
+				<p>
+					{{ rating.user.getName()}}</p>
+				<p>
+
+					{% for i in 1..5 %}
+						{% if rating.value >= i%}
+							<i class="fa fa-star checked" id="{{i}}"></i>
+						{% else %}
+							<i class="fa fa-star unchecked" id="{{i}}"></i>
+						{% endif %}
+					{% endfor %}
+					{{ rating.value}}/5</p>
+
+				<p>
+					{{ rating.comment}}</p>
+				{% if app.user.getAdmin() == 1 %}
+
+					<button type="button" class="btn deletebtn">Delete</button>
+
+				{% endif %}
+			</div>
+
+
+		{% endfor %}<br></td>
+</tr></td></tr>{% if app.user and userrating == null %}<tr>
+<th>Suivie</th>
+<td>
+	{% if suivie %}
+		<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
+			✅
+		</a>
+	{% else %}
+		<a href="{{ path('series_follow', {'id' : series.id } ) }}">❌
+		</a>
 	{% endif %}
-</tr></tbody></td></tr></tbody></table><a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>{% endblock %}
+</td></tr><tr>
+<th>Notez la série !</th>
+<td>
+	{{ form_start(ratingform) }}
+	<p>Votre note :</p>
+	{{ form_widget(ratingform.value ) }}
+	<p>Votre avis :</p>
+	{{ form_widget(ratingform.comment) }}
+	{{ form_end(ratingform) }}
+	<br>
+</td></tr>{% elseif userrating != null %}<th>Votre évalutation</th><td>
+<p>
+	Vous avez déjà noté cette série</p></td>{% endif %}</tr></tbody></td></tr></tbody></table><a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>{% endblock %}
