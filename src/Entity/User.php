@@ -271,7 +271,7 @@ class User implements UserInterface
     }
     public function getRoles()
     {
-        if ($this . getAdmin() == 0) {
+        if ($this->getAdmin() == 0) {
             return ['ROLE_USER'];
         }
         return ['ROLE_ADMIN'];
