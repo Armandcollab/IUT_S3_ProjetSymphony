@@ -1,35 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Season index{% endblock %}
+{% block title %}Season index
+{% endblock %}
 
 {% block body %}
-    <h1>Season index</h1>
+	<h1>Season index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Number</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for season in seasons %}
-            <tr>
-                <td>{{ season.id }}</td>
-                <td>{{ season.number }}</td>
-                <td>
-                    <a href="{{ path('season_show', {'id': season.id}) }}">show</a>
-                    <a href="{{ path('season_edit', {'id': season.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Number</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% set id_series = null %}
+			{% for season in seasons %}
+				{% if null == id_series %}
+					{% set id_series = season.series.id %}
+				{% endif %}
+				<tr>
+					<td>{{ season.number }}</td>
+					<td>
+						<a href="{{ path('season_edit', {'id': season.id}) }}">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="3">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-    <a href="{{ path('season_new') }}">Create new</a>
+	<button class="btn">
+		<a href="{{ path('season_new') }}">Create new</a>
+	</button>
+	<button class="btn">
+		<a href="{{ path('series_show',{'id' : id_series }) }}">retour</a>
+	</button>
 {% endblock %}

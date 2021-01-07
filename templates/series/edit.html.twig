@@ -8,7 +8,10 @@
 
 	{{ include('series/_form.html.twig', {'button_label': 'Update'}) }}
 	<button class="btn" label:"Update">
-		<a href="{{ path('series_new') }}">créer une nouvelle saison</a>
+		<a href="{{ path('season_new') }}">créer une nouvelle saison</a>
+	</button>
+    <button class="btn" label:"Update">
+		<a href="{{ path('season_show_serie', {'id' : series.id }) }}">modifier les saisons existantes</a>
 	</button>
 	<button class="btn" >
 		<a href="{{ path('series_index') }}">back to list</a>

@@ -271,7 +271,10 @@ class User implements UserInterface
     }
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        if ($this . getAdmin() == 0) {
+            return ['ROLE_USER'];
+        }
+        return ['ROLE_ADMIN'];
     }
     public function eraseCredentials()
     {

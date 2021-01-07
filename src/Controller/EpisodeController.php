@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Episode;
+use App\Entity\Season;
 use App\Form\EpisodeType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/episode")
@@ -52,12 +55,23 @@ class EpisodeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="episode_show", methods={"GET"})
+     * @Route("/{id}", name="episode_show_season", methods={"GET"})
      */
-    public function show(Episode $episode): Response
+    public function show(Season $season): Response
     {
-        return $this->render('episode/show.html.twig', [
-            'episode' => $episode,
+
+        $episodes = $this->getDoctrine()
+            ->getRepository(Episode::class)
+            ->createQueryBuilder('e')
+            ->andwhere('e.season = :season')
+            ->setParameter('season', $season)
+            ->orderBy('e.number')
+            ->getQuery()
+            ->execute();
+
+
+        return $this->render('episode/index.html.twig', [
+            'episodes' => $episodes,
         ]);
     }
 
@@ -86,7 +100,7 @@ class EpisodeController extends AbstractController
      */
     public function delete(Request $request, Episode $episode): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$episode->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($episode);
             $entityManager->flush();

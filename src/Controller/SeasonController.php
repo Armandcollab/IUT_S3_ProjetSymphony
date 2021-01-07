@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Season;
+use App\Entity\Series;
 use App\Form\SeasonType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,12 +53,22 @@ class SeasonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="season_show", methods={"GET"})
+     * @Route("/{id}", name="season_show_serie", methods={"GET"})
      */
-    public function show(Season $season): Response
+    public function show(Series $serie): Response
     {
-        return $this->render('season/show.html.twig', [
-            'season' => $season,
+        $seasons = $this->getDoctrine()
+        ->getRepository(Season::class)
+        ->createQueryBuilder('s')
+        ->andwhere('s.series = :serie')
+        ->setParameter('serie', $serie)
+        ->orderBy('s.number')
+        ->getQuery()
+        ->execute();
+
+
+        return $this->render('season/index.html.twig', [
+            'seasons' => $seasons,
         ]);
     }
 

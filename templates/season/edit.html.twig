@@ -12,8 +12,12 @@
 		<a href="{{ path('episode_new') }}">créer une nouvelle épisode</a>
 	</button>
 
+	<button class="btn" label:"Update">
+		<a href="{{ path('episode_show_season', {'id' : season.id}) }}">Modifier les épisodes existant</a>
+	</button>
+
 	<button class="btn">
-		<a href="{{ path('season_index') }}">back to list</a>
+    	<a href="{{ path('season_show_serie', {'id' : season.id}) }}">retour</a>
 	</button>
 	{{ include('season/_delete_form.html.twig') }}
 {% endblock %}
