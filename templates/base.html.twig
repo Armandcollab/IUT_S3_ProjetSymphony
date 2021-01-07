@@ -10,6 +10,9 @@
 		<link rel="stylesheet" href="{{asset('css/style.css') }}">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{{asset('css/jquery.rating.css') }}">
+		<link rel="stylesheet" href="{{asset('css/acceuil.css') }}">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 
 	</head>
 
@@ -20,9 +23,9 @@
 			<a href="{{ path('home') }}" class="navbar-icon"><img src="https://fontmeme.com/permalink/210106/af3c4f9e847410ba1edc6f6c8deb11f1.png" alt="netflix-font" class="image" border="0"></a>
 			<div class="navbar-menu ml-auto">
 				<a class="navbar-link" href="{{ path('home') }}">Accueil</a>
-				<a class="navbar-link" href="{{ path('series_index') }}">Series</a>
+				<a class="navbar-link" href="{{ path('series_index') }}">Séries</a>
 				{% if app.user %}
-					<a class="navbar-link" href="{{ path('series_followed') }}">Series suivies</a>
+					<a class="navbar-link" href="{{ path('series_followed') }}">Séries suivies</a>
 					<img src="{{asset('icons/user_icon.png') }}" alt="User" class="image" id="user-icon">
 					<p class="navbar-link">Nom :
 						{{ app.user}}
@@ -47,7 +50,7 @@
 	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 	<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onGoogleReCaptchaApiLoad&render=explicit&hl={{ app.request.locale }}" async defer></script>
 	{% block javascripts %}{% endblock %}
-	<script src="{{ asset('js/main.js') }}"></script>
+	<script src="{{ asset('js/sauce.js') }}"></script>
 	<script src="{{ asset('js/jquery.rating.js') }}"></script>
 
 

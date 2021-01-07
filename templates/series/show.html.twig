@@ -16,160 +16,104 @@
 {% endblock %}
 
 {% block body %}
-	<h1>{{ series.title }}</h1>
+	<main class="show">
+		{{ block('serie',"series/index.html.twig") }}
+		<div class="show-content">
 
-	<table class="table">
-		<tbody>
-			<tr>
-				<th>Id</th>
-				<td>{{ series.id }}</td>
-			</tr>
-			<tr>
-				<th>Title</th>
-				<td>{{ series.title }}</td>
-			</tr>
-			<tr>
-				<th>Plot</th>
-				<td>{{ series.plot }}</td>
-			</tr>
-			<tr>
-				<th>Imdb</th>
-				<td>
-					<a href="https://www.imdb.com/title/{{imdbcode}}/" alt="imdb-page">
-						Consulter la page Imdb
-					</a>
-				</td>
-			</tr>
-		</tbody>
-	</td>
-</tr>
-<tr>
-	<th>Poster</th>
-	<td><img src="{{path('series_poster', {'id': series.id} ) }}" alt="poster"></td>
-</tr>
-<tr>
-	<th>Director</th>
-	<td>{{ series.director }}</td>
-</tr>
-<tr>
-	<th>YoutubeTrailer</th>
-	<td>
-		<iframe width="420" height="345" src="https://www.youtube.com/embed/{{ytbcode}}?autoplay=1&mute=1"></iframe>
-	</td>
-</tr>
-<tr>
-	<th>Awards</th>
-	<td>{{ series.awards }}</td>
-</tr>
-<tr>
-	<th>YearStart</th>
-	<td>{{ series.yearStart }}</td>
-</tr>
-<tr>
-	<th>YearEnd</th>
-	<td>{{ series.yearEnd }}</td>
-</tr>
-<tr>
-	<th>Seasons</th>
-	<td>
-		<button class="season_nav">Consulter l'ensemble des épisodes</button>
-		<ul>
-			{% set 	seasonNBR = 1 %}
-			{% for season in seasons %}
-				<li>Season
-					{{seasonNBR}}
-					{% set seasonNBR = seasonNBR + 1 %}
-				</li>
-				<div class="episodes">
-					<ul>
-						{% for episode in season %}
-							<li>{{episode.title}}
-								{% if app.user %}
-									{% if user in episode.user %}
-										<a href="{{ path('episode_unfollow', {'id' : episode.id } ) }}">
-											✅
-										</a>
-									{% else %}
-										<a href="{{ path('episode_follow', {'id' : episode.id } ) }}">
-											❌
-										</a>
-									{% endif %}
+			<div class="youtubetrailer">
+				<iframe width="670" height="500" src="https://www.youtube.com/embed/{{ytbcode}}?autoplay=1&mute=1"></iframe>
+			</div>
+			<div class="show-seasons">
+				<div class="w3-container">
+					<h2>Consulter les saisons</h2>
+					<ul class="w3-ul w3-dark">
+						{% set 	seasonNBR = 1 %}
+						{% for season in seasons %}
+							<li>
+								<button type="button" class="collap">Season
+									{{seasonNBR}}
+									{% set seasonNBR = seasonNBR + 1 %}</button>
+								<div class="episodes content">
+									<ul>
+										{% for episode in season %}
+											<li><b>{{episode.title}}</b>
+												{{ episode.date|date("m/d/Y") }}
+												{% if app.user %}
+													{% if app.user in episode.user %}
+														<a href="{{ path('episode_unfollow', {'id' : episode.id } ) }}" style="float: right;">
+															✅
+														</a>
+													{% else %}
+														<a href="{{ path('episode_follow', {'id' : episode.id } ) }}" style="float: right;">
+															❌
+														</a>
+													{% endif %}
 
-								{% endif %}
+												{% endif %}
+											</li>
+
+										{% endfor %}
+									</ul>
+								</div>
 							</li>
+
 
 						{% endfor %}
 					</ul>
 				</div>
 
-			{% endfor %}
-		</ul>
-	</td>
-</tr>
-<tr></tr>
-<tr>
-	<th>Les évaluations des internautes</th>
-	<td>
-		{% for rating in ratings %}
-			<div class="user-rating">
-				<p>
-					{{ rating.user.getName()}}</p>
-				<p>
 
-					{% for i in 1..5 %}
-						{% if rating.value >= i%}
-							<i class="fa fa-star checked" id="{{i}}"></i>
-						{% else %}
-							<i class="fa fa-star unchecked" id="{{i}}"></i>
-						{% endif %}
-					{% endfor %}
-					{{ rating.value}}/5</p>
-
-				<p>
-					{{ rating.comment}}</p>
-<<<<<<< HEAD
-				{% if app.user %}
-
-					{% if app.user.getAdmin() == 1 %}
-
-						<button type="button" class="btn deletebtn">Delete</button>
-
-					{% endif %}
-				{% endif %}
 			</div>
-=======
-				{% if app.user and app.user.getAdmin() == 1 %}
+			<div class="show-ratings">
+				<h2>Les avis des internautes</h2>
+				{% if ratings %}
+					{% for rating in ratings %}
+						<div class="user-rating">
+							<p>
+								{{ rating.user.getName()}}</p>
+							<p>
 
-					{{ form(adminDelForms[rating.id]) }}{% endif %}
-				</div>
->>>>>>> 6303b061a02d166ed9fc6926e69669460550e2ac
+								{% for i in 1..5 %}
+									{% if rating.value >= i%}
+										<i class="fa fa-star checked" id="{{i}}"></i>
+									{% else %}
+										<i class="fa fa-star unchecked" id="{{i}}"></i>
+									{% endif %}
+								{% endfor %}
+								{{ rating.value}}/5</p>
+
+							<p>
+								{{ rating.comment}}</p>
+							{% if app.user and app.user.getAdmin() == 1 %}
+
+								{{ form(adminDelForms[rating.id]) }}{% endif %}
+							</div>
 
 
-			{% endfor %}<br></td>
-	</td>
-</tr></td></tr>{% if app.user and userrating == null %}<tr>
-<th>Suivie</th>
-<td>
-	{% if suivie %}
-		<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
-			✅
-		</a>
-	{% else %}
-		<a href="{{ path('series_follow', {'id' : series.id } ) }}">
-			❌
-		</a>
-	{% endif %}
-</td></tr><tr>
+						{% endfor %}
+					{% else %}
+						<img src="../../icons/icons8-oops-64.png" class="image" alt="oopsicon"><p>Oups... Il semblerait qu'aucune note n'existe pour cette série
+						{% endif %}
+					</div>
 
-<th>Notez la série !</th>
-<td>
-	{{ form_start(ratingform) }}
-	<p>Votre note :</p>
-	{{ form_widget(ratingform.value ) }}
-	<p>Votre avis :</p>
-	{{ form_widget(ratingform.comment) }}
-	{{ form_end(ratingform) }}
-	<br>
-</td></tr>{% elseif app.user and userrating != null %}<th>Votre évalutation</th><td>
-<p>
-	Vous avez déjà noté cette série</p></td>{% endif %}</tr></tbody></td></tr></tbody></table><a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>{% endblock %}
+
+				</main>
+				<div class="ratingform">
+						{% if app.user and userrating == null %}
+
+
+							<div class="show-ratingform">
+								<h2>{{ app.user.getName()}}, partagez votre avis c'est important !</h2>
+								{{ form_start(ratingform) }}<p>Votre note :</p>
+								{{ form_widget(ratingform.value ) }}<p>Votre avis :</p>
+								{{ form_widget(ratingform.comment) }}{{ form_end(ratingform) }}<br>
+							</div>
+
+
+						{% elseif app.user and userrating != null %}
+							<p>
+								Ah ! Il semblerait que vous ayez déjà noté cette série</p>
+						{% endif %}
+					</div>
+				<button type="button" class="imp"><a href="{{ path('series_pages', {'id': series.id /10} ) }}"><p>Revenir à la liste des séries</p></a></button>
+			{% endblock %}

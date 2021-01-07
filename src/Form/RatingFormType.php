@@ -49,7 +49,7 @@ class RatingFormType extends AbstractType
             ->add('comment',  TextareaType::class, array(
                 'mapped' => true,
                 'required' => true,
-                'attr' => array('style' => 'width: 400px;height:250px;resize: none'),
+                'attr' => array('style' => 'width: 600px;height:250px;resize: none'),
 
             ))
             ->add('date',  DateTimeType::class, array(

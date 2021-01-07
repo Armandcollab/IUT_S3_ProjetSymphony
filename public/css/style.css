@@ -22,8 +22,18 @@ body {
     background-position-x: 40%;
     background-position-y: 46%;
     background-size: cover;
-    box-shadow: 5px 10px 20px black inset;
+    box-shadow: 0px 0px 200px black inset;
     width: 100%;
+}
+
+.show {
+    margin-top: 3.5rem;
+    padding: 1rem;
+}
+
+.show-title {
+    background-color: #4D4D4D;
+    padding: 1rem;
 }
 
 .login-form {
@@ -242,8 +252,12 @@ a {
     padding-left: 1rem;
     padding-right: 1rem;
     margin: 0.5rem;
-    background-color: #262626;
+    height: fit-content;
+    width: fit-content;
+    background-color: #383838;
     color: white;
+    border: solid black;
+    float: left;
 }
 
 .checked {
@@ -260,8 +274,9 @@ a {
 
 .series-list {
     background-color: black;
-    padding-top: 1rem;
-    box-shadow: 5px 10px 30px #4D4D4D inset;
+    padding: 1rem;
+    padding-top: 0.3rem;
+    box-shadow: inset 0 0 1em wheat 0 0 2em black;
 }
 
 .serie {
@@ -273,10 +288,10 @@ a {
     flex-wrap: wrap;
     justify-content: flex-start;
     background-color: #262626;
+    box-shadow: 5px 10px 30px black outset;
 }
 
 .serie-title {
-    background-color: #FA314A;
     font-size: 1.4rem;
     width: 100%;
     padding: 0.3rem;
@@ -285,16 +300,16 @@ a {
 }
 
 .serie-poster {
-    background-color: black;
+    background-color: #222222;
     float: left;
     padding-right: 0.7rem;
+    padding-left: 0.7rem;
     padding-top: 0.7rem;
     padding-bottom: 0.6rem;
 }
 
 .serie-content {
-    background-color: #262626;
-    ;
+    background-color: #222222;
 }
 
 .serie-description {
@@ -311,13 +326,87 @@ a {
 }
 
 .serie-details {
-    background: #4D4D4D;
+    background: #2F2F2F;
     height: auto;
     padding: 1rem;
+    display: flex;
+    justify-content: center;
     padding-right: 2rem;
     margin: 1rem;
 }
 
+.show-content {
+    background-color: #262626;
+    width: 100%;
+    display: flex;
+}
+
+.show-seasons {
+    background-color: #262626;
+    width: 35%;
+    padding: 0.3rem;
+    min-width: fit-content;
+    min-height: fit-content;
+}
+
+.serie-title {
+    background-color: #383838;
+}
+
+.show-ratings {
+    background-color: #2F2F2F;
+    min-width: fit-content;
+    min-height: 200px;
+    width: 40%;
+    padding: 0.3rem;
+    padding-left: 1rem;
+}
+
+.w3-dark {
+    background-color: #4D4D4D;
+    color: lightgray;
+}
+
+.youtubetrailer {
+    position: relative;
+    display: flex;
+    float: left;
+    height: 100%;
+    background-color: black;
+    border: solid black;
+}
+
+.ratingform {
+    padding: 1rem;
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
+    background-color: #2F2F2F;
+}
+
 #seemore {
     height: fit-content;
+}
+
+.collap {
+    background-color: #4D4D4D;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+
+.active,
+.collap:hover {
+    background-color: #2F2F2F;
+}
+
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: black;
 }
