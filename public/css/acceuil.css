@@ -30,11 +30,7 @@ user agent stylesheet main {
 
 html {
     font-size: 100%;
-<<<<<<< HEAD
     background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../../other/background/719647.jpg");
-=======
-    background: #262626;
->>>>>>> dc37c2f7e97e77d8daddb15d20b1ff83f501c87d
     color: #fff;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
