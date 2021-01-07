@@ -8,7 +8,7 @@ $(function() {
 
 
 
-
+/*
 function filterSettingChecked() {
 
     var filters = document.getElementById("myBtnContainer");
@@ -22,6 +22,8 @@ function filterSettingChecked() {
     }
 
 }
+*/
+
 
 function w3AddClass(element, name) {
     var i, arr1, arr2;

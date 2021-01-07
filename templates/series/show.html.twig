@@ -94,6 +94,7 @@
 											❌
 										</a>
 									{% endif %}
+
 								{% endif %}
 							</li>
 
@@ -126,6 +127,7 @@
 
 				<p>
 					{{ rating.comment}}</p>
+<<<<<<< HEAD
 				{% if app.user %}
 
 					{% if app.user.getAdmin() == 1 %}
@@ -135,10 +137,17 @@
 					{% endif %}
 				{% endif %}
 			</div>
+=======
+				{% if app.user and app.user.getAdmin() == 1 %}
+
+					{{ form(adminDelForms[rating.id]) }}{% endif %}
+				</div>
+>>>>>>> 6303b061a02d166ed9fc6926e69669460550e2ac
 
 
-		{% endfor %}<br></td>
-</tr></td></tr>{% if app.user %}<tr>
+			{% endfor %}<br></td>
+	</td>
+</tr></td></tr>{% if app.user and userrating == null %}<tr>
 <th>Suivie</th>
 <td>
 	{% if suivie %}
@@ -161,6 +170,6 @@
 	{{ form_widget(ratingform.comment) }}
 	{{ form_end(ratingform) }}
 	<br>
-</td></tr>{% elseif userrating != null %}<th>Votre évalutation</th><td>
+</td></tr>{% elseif app.user and userrating != null %}<th>Votre évalutation</th><td>
 <p>
 	Vous avez déjà noté cette série</p></td>{% endif %}</tr></tbody></td></tr></tbody></table><a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>{% endblock %}
