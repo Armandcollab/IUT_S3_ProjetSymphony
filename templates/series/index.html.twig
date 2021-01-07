@@ -3,15 +3,6 @@
 {% block title %}Liste des séries
 {% endblock %}
 {% form_theme categoriesform _self %}
-{% block genres_widget %}
-
-	<select id="cars" name="cars">
-		{% for genre in genres %}
-			<option value="volvo">Volvo</option>
-		{% endfor %}
-	</select>
-	<br>
-{% endblock %}
 
 {% block body %}
 
@@ -30,7 +21,6 @@
 			{{ form_start(searchform) }}
 			<div class="filters-container">
 				<div class="search-container">
-
 
 					<p>
 						Trier par notes croissantes</p>
@@ -58,34 +48,30 @@
 
 			{% if id > 0 %}
 				<button type="button">
-					<a href="
-																								{% if search == NULL %}
-																								{{ path(page, {'id': id - 1}) }}
-																								{% else %}
-																								{{ path(page, {'id': id - 1, 'search' : search}) }}
-																								{% endif %}
-																								">Page précédente</a>
+					<a href="{% if search == NULL %}{{ path(page, {'id': id - 1}) }}{% else %}{{ path(page, {'id': id - 1, 'search' : search}) }}{% endif %}">Page précédente</a>
 				</button>
 			{% endif %}
 
 			{% if id < size/10 - 1 %}
 				<button type="button">
-					<a href="
-																								{% if search == NULL %}
-																								{{ path(page, {'id': id + 1}) }}
-																								{% else %}
-																								{{ path(page, {'id': id + 1, 'search' : search}) }}
-																								{% endif %}
-																								">Page suivante</a>
+					<a href="{% if search == NULL %}{{ path(page, {'id': id + 1}) }}{% else %}{{ path(page, {'id': id + 1, 'search' : search}) }}{% endif %}">Page suivante</a>
 				</button>
 			{% endif %}
+
+			{% if app.user %}
+				{% if app.user.getAdmin() == 1 %}
+					<button type="button" id="series_new">
+						<a href="{{ path('series_new') }}">Ajouter une série</a>
+					</button>
+				{% endif %}
+			{% endif %}
+
 			<p>{{ size }}
 				références</p>
 		</nav>
 	</div>
 
 	<main class="series-list">
-
 
 		{% for series in series %}
 			<div class="serie">
@@ -119,6 +105,13 @@
 								<button type="button" id="seemore">
 									<a href="{{ path('series_show', {'id': series.id}) }}">Plus de détails</a>
 								</button>
+								{% if app.user %}
+									{% if app.user.getAdmin() == 1 %}
+										<button type="button" id="series_edit">
+											<a href="{{ path('series_edit', {'id': series.id}) }}">Editer</a>
+										</button>
+									{% endif %}
+								{% endif %}
 							</ul>
 						</div>
 

@@ -127,49 +127,38 @@
 
 				<p>
 					{{ rating.comment}}</p>
-<<<<<<< HEAD
 				{% if app.user %}
-
 					{% if app.user.getAdmin() == 1 %}
 
 						<button type="button" class="btn deletebtn">Delete</button>
 
-					{% endif %}
+					</div>
+					{% if app.user and app.user.getAdmin() == 1 %}
+
+						{{ form(adminDelForms[rating.id]) }}{% endif %}
+					</div>
 				{% endif %}
-			</div>
-=======
-				{% if app.user and app.user.getAdmin() == 1 %}
-
-					{{ form(adminDelForms[rating.id]) }}{% endif %}
-				</div>
->>>>>>> 6303b061a02d166ed9fc6926e69669460550e2ac
+			{% endif %}
 
 
-			{% endfor %}<br></td>
-	</td>
-</tr></td></tr>{% if app.user and userrating == null %}<tr>
-<th>Suivie</th>
-<td>
-	{% if suivie %}
-		<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
-			✅
-		</a>
-	{% else %}
-		<a href="{{ path('series_follow', {'id' : series.id } ) }}">
-			❌
-		</a>
+		{% endfor %}<br></td>
+</tr></td></tr></td></tr>{% if app.user and userrating == null %}<tr><th>Suivie</th><td>{% if suivie %}
+<a href="{{ path('series_unfollow', {'id' : series.id } ) }}">
+	✅
+</a>{% else %}
+<a href="{{ path('series_follow', {'id' : series.id } ) }}">
+	❌
+</a>{% endif %}</td></tr><tr><th>Notez la série !</th><td>{{ form_start(ratingform) }}<p>Votre note :</p>{{ form_widget(ratingform.value ) }}<p>Votre avis :</p>{{ form_widget(ratingform.comment) }}{{ form_end(ratingform) }}<br></td></tr>{% elseif app.user and userrating != null %}<th>Votre évalutation</th><td><p>Vous avez déjà noté cette série
+
+</p></td>{% endif %}</tr></tbody></td></tr></tbody> </table> 
+<a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>
+
+
+{% if app.user %}
+	{% if app.user.getAdmin() == 1 %}
+		<button type="button" id="series_edit">
+			<a href="{{ path('series_edit', {'id': series.id}) }}">Editer</a>
+		</button>
 	{% endif %}
-</td></tr><tr>
-
-<th>Notez la série !</th>
-<td>
-	{{ form_start(ratingform) }}
-	<p>Votre note :</p>
-	{{ form_widget(ratingform.value ) }}
-	<p>Votre avis :</p>
-	{{ form_widget(ratingform.comment) }}
-	{{ form_end(ratingform) }}
-	<br>
-</td></tr>{% elseif app.user and userrating != null %}<th>Votre évalutation</th><td>
-<p>
-	Vous avez déjà noté cette série</p></td>{% endif %}</tr></tbody></td></tr></tbody></table><a href="{{ path('series_pages', {'id': series.id /10} ) }}">back to list</a>{% endblock %}
+{% endif %}
+{% endblock %}
