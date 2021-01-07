@@ -84,14 +84,16 @@
 					<ul>
 						{% for episode in season %}
 							<li>{{episode.title}}
-								{% if user in episode.user %}
-									<a href="{{ path('episode_unfollow', {'id' : episode.id } ) }}">
-										✅
-									</a>
-								{% else %}
-									<a href="{{ path('episode_follow', {'id' : episode.id } ) }}">
-										❌
-									</a>
+								{% if app.user %}
+									{% if user in episode.user %}
+										<a href="{{ path('episode_unfollow', {'id' : episode.id } ) }}">
+											✅
+										</a>
+									{% else %}
+										<a href="{{ path('episode_follow', {'id' : episode.id } ) }}">
+											❌
+										</a>
+									{% endif %}
 								{% endif %}
 							</li>
 
@@ -124,10 +126,13 @@
 
 				<p>
 					{{ rating.comment}}</p>
-				{% if app.user.getAdmin() == 1 %}
+				{% if app.user %}
 
-					<button type="button" class="btn deletebtn">Delete</button>
+					{% if app.user.getAdmin() == 1 %}
 
+						<button type="button" class="btn deletebtn">Delete</button>
+
+					{% endif %}
 				{% endif %}
 			</div>
 
