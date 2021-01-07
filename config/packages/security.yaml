@@ -22,3 +22,8 @@ security:
 
     access_control:
         - { path: ^/series/page/$, role:[IS_AUTHENTICATED_ANONYMOUSLY, ROLE_USER] }
+        - { path: ^/episode, role:[ROLE_ADMIN] }
+        - { path: ^/season, role:[ROLE_ADMIN] }
+        - { path: ^/series/edit, role:[ROLE_ADMIN] }
+        - { path: ^/series/new, role:[ROLE_ADMIN] }
+        - { path: ^/series/delete, role:[ROLE_ADMIN] }

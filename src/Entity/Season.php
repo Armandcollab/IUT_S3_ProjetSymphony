@@ -67,5 +67,10 @@ class Season
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->getSeries()->getTitle()." saison numéro ".$this->number;
+    }
+
 
 }

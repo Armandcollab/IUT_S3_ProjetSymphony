@@ -6,6 +6,8 @@ use App\Entity\Series;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class SeriesType extends AbstractType
 {
@@ -13,17 +15,21 @@ class SeriesType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('plot')
+            ->add('plot',TextType::class)
             ->add('imdb')
-            ->add('poster')
+            //->add('poster') //TODO ajouter un poster en binaire
             ->add('director')
-            ->add('youtubeTrailer')
-            ->add('awards')
+            ->add('youtubeTrailer', UrlType::class)
+            ->add('awards', TextType::class)
             ->add('yearStart')
             ->add('yearEnd')
             ->add('actor')
-            ->add('country')
-            ->add('genre')
+            ->add('country', null, [ 
+                'expanded' => true
+            ])
+            ->add('genre', null, [ 
+                'expanded' => true
+            ])
             ->add('user')
         ;
     }

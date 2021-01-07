@@ -24,7 +24,6 @@
 			<div class="filters-container">
 				<div class="search-container">
 
-
 					<p>
 						Trier par notes croissantes</p>
 					{{ form_widget(searchform.note) }}
@@ -72,13 +71,21 @@
 																																																																																																">Page suivante</a>
 				</button>
 			{% endif %}
+
+			{% if app.user %}
+				{% if app.user.getAdmin() == 1 %}
+					<button type="button" id="series_new">
+						<a href="{{ path('series_new') }}">Ajouter une série</a>
+					</button>
+				{% endif %}
+			{% endif %}
+
 			<p>{{ size }}
 				références</p>
 		</nav>
 	</div>
 
 	<main class="series-list">
-
 
 		{% for series in series %}
 			{% block serie %}

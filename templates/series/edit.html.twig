@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Series
+{% endblock %}
+
+{% block body %}
+	<h1>Edit Series</h1>
+
+	{{ include('series/_form.html.twig', {'button_label': 'Update'}) }}
+	<button class="btn" label:"Update">
+		<a href="{{ path('season_new') }}">créer une nouvelle saison</a>
+	</button>
+    <button class="btn" label:"Update">
+		<a href="{{ path('season_show_serie', {'id' : series.id }) }}">modifier les saisons existantes</a>
+	</button>
+	<button class="btn" >
+		<a href="{{ path('series_index') }}">back to list</a>
+	</button>
+
+	{{ include('series/_delete_form.html.twig') }}
+
+{% endblock %}
