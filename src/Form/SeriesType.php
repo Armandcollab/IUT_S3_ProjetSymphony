@@ -17,7 +17,7 @@ class SeriesType extends AbstractType
             ->add('title')
             ->add('plot',TextType::class)
             ->add('imdb')
-            ->add('poster') //TODO ajouter un poster en binaire
+            //->add('poster') //TODO ajouter un poster en binaire
             ->add('director')
             ->add('youtubeTrailer', UrlType::class)
             ->add('awards', TextType::class)
