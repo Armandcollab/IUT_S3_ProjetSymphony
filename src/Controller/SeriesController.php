@@ -503,7 +503,7 @@ class SeriesController extends AbstractController
 
 
     /**
-     * @Route("/{id}/edit", name="series_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}", name="series_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Series $series): Response
     {
@@ -523,7 +523,7 @@ class SeriesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="series_delete", methods={"DELETE"})
+     * @Route("/delete/{id}", name="series_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Series $series): Response
     {
