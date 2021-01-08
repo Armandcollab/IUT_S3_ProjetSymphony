@@ -24,6 +24,7 @@
 			<div class="navbar-menu ml-auto">
 				<a class="navbar-link" href="{{ path('home') }}">Accueil</a>
 				<a class="navbar-link" href="{{ path('series_index') }}">Séries</a>
+				<a class="navbar-link" href="{{asset('other/apropos.html') }}">À propos</a>
 				{% if app.user %}
 					<a class="navbar-link" href="{{ path('series_followed') }}">Séries suivies</a>
 					<img src="{{asset('icons/user_icon.png') }}" alt="User" class="image" id="user-icon">
