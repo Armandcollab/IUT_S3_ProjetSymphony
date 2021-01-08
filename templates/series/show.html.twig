@@ -117,7 +117,7 @@
 					{% endif %}
 				</div>
 				<button type="button" class="imp">
-					<a href="{{ path('series_pages', {'id': series.id /10} ) }}">
+					<a href="{{ app.request.headers.get('referer') }}">
 						<p>Revenir à la liste des séries</p>
 					</a>
 				</button>
