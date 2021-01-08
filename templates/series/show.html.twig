@@ -36,7 +36,8 @@
 								<div class="episodes content">
 									<ul>
 										{% for episode in season %}
-											<li><b>{{episode.title}}</b>
+											<li>
+												<b>{{episode.title}}</b>
 												{{ episode.date|date("m/d/Y") }}
 												{% if app.user %}
 													{% if app.user in episode.user %}
@@ -80,12 +81,12 @@
 										<i class="fa fa-star unchecked" id="{{i}}"></i>
 									{% endif %}
 								{% endfor %}
-								{{ rating.value}}/5</p>
+							</p>
+							<p>{{ rating.value}}/5</p>
 
 							<p>
 								{{ rating.comment}}</p>
 							{% if app.user and app.user.getAdmin() == 1 %}
-
 								{{ form(adminDelForms[rating.id]) }}{% endif %}
 							</div>
 
@@ -99,21 +100,25 @@
 
 				</main>
 				<div class="ratingform">
-						{% if app.user and userrating == null %}
+					{% if app.user and userrating == null %}
 
 
-							<div class="show-ratingform">
-								<h2>{{ app.user.getName()}}, partagez votre avis c'est important !</h2>
-								{{ form_start(ratingform) }}<p>Votre note :</p>
-								{{ form_widget(ratingform.value ) }}<p>Votre avis :</p>
-								{{ form_widget(ratingform.comment) }}{{ form_end(ratingform) }}<br>
-							</div>
+						<div class="show-ratingform">
+							<h2>{{ app.user.getName()}}, partagez votre avis c'est important !</h2>
+							{{ form_start(ratingform) }}<p>Votre note :</p>
+							{{ form_widget(ratingform.value ) }}<p>Votre avis :</p>
+							{{ form_widget(ratingform.comment) }}{{ form_end(ratingform) }}<br>
+						</div>
 
 
-						{% elseif app.user and userrating != null %}
-							<p>
-								Ah ! Il semblerait que vous ayez déjà noté cette série</p>
-						{% endif %}
-					</div>
-				<button type="button" class="imp"><a href="{{ path('series_pages', {'id': series.id /10} ) }}"><p>Revenir à la liste des séries</p></a></button>
+					{% elseif app.user and userrating != null %}
+						<p>
+							Ah ! Il semblerait que vous ayez déjà noté cette série</p>
+					{% endif %}
+				</div>
+				<button type="button" class="imp">
+					<a href="{{ path('series_pages', {'id': series.id /10} ) }}">
+						<p>Revenir à la liste des séries</p>
+					</a>
+				</button>
 			{% endblock %}
