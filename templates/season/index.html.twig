@@ -22,7 +22,9 @@
 				<tr>
 					<td>{{ season.number }}</td>
 					<td>
-						<a href="{{ path('season_edit', {'id': season.id}) }}">edit</a>
+						<button type="button">
+							<a href="{{ path('season_edit', {'id': season.id}) }}">edit</a>
+						</button>
 					</td>
 				</tr>
 			{% else %}
