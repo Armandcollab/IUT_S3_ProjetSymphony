@@ -58,11 +58,9 @@
 								</div>
 							</li>
 
-
 						{% endfor %}
 					</ul>
 				</div>
-
 
 			</div>
 			<div class="show-ratings">
@@ -121,4 +119,11 @@
 						<p>Revenir à la liste des séries</p>
 					</a>
 				</button>
+				{% if app.user and app.user.getAdmin() == 1 %}
+				<button type="button" class="imp">
+					<a href="{{ path('series_edit', {'id' : series.id}) }}">
+						<p>Editer</p>
+					</a>
+				</button>
+				{% endif %}
 			{% endblock %}

@@ -31,7 +31,9 @@
 					<td>{{ episode.imdbrating }}</td>
 					<td>{{ episode.number }}</td>
 					<td>
-						<a href="{{ path('episode_edit', {'id': episode.id}) }}">edit</a>
+						<button type="button">
+							<a href="{{ path('episode_edit', {'id': episode.id}) }}">edit</a>
+						</button>
 					</td>
 				</tr>
 			{% else %}
