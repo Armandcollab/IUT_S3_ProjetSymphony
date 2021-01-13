@@ -1,11 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Episode{% endblock %}
+{% block title %}New Episode
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Episode</h1>
+	<h1>Create new Episode</h1>
 
-    {{ include('episode/_form.html.twig') }}
+	{{ include('episode/_form.html.twig') }}
 
-    <a href="{{ path('series_index') }}">retour</a>
+	<button type="btn">
+		<a href="{{ path('series_index') }}">retour</a>
+	</button>
 {% endblock %}

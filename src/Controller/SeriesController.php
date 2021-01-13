@@ -53,7 +53,7 @@ class SeriesController extends AbstractController
     }
 
     /**
-     * inject securty service
+     * inject security service
      * @var Security
      */
     private $security;
@@ -394,17 +394,15 @@ class SeriesController extends AbstractController
         }
         $adminDelForms = array();
 
-        if ($user != null && $user->getAdmin() == 1 && $ratings != null) {
+        if ($user != null && $user->getAdmin() == 1 && $ratings != null && empty($ratings) == false) {
 
 
             foreach ($ratings as $rating) {
 
                 $adminDelForms[$rating->getId()] = $this->getAdminCommentForm($rating->getId())->getForm();
                 $adminDelForms[$rating->getId()]->handleRequest(Request::createFromGlobals());
-            }
-            foreach ($adminDelForms as $adminform) {
 
-                if ($adminform->isSubmitted() && $adminform->isValid()) {
+                if ($adminDelForms[$rating->getId()]->isSubmitted() && $adminDelForms[$rating->getId()]->isValid()) {
                     $em = $this->getDoctrine()->getManager();
                     $Repo = $em->getRepository(Rating::class);
                     $identifiant = $rating->getId();
@@ -414,12 +412,10 @@ class SeriesController extends AbstractController
                     $em->flush($delrating);
                     return $this->redirect($request->getUri());
                 }
+
+                $adminDelForms[$rating->getId()] = $adminDelForms[$rating->getId()]->createView();
             }
-            $adminDelForms[$rating->getId()] = $adminDelForms[$rating->getId()]->createView();
         }
-
-
-
 
         $ytbcode = substr($series->getYoutubeTrailer(), strpos($series->getYoutubeTrailer(), "=") + 1);
         $imdbcode = $series->getImdb();

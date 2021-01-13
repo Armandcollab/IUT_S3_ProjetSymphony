@@ -2,7 +2,6 @@
     display: block;
     position: relative;
     margin: 0 auto;
-    background: #4D4D4D;
     padding-bottom: 1px;
     overflow: visible;
     /* font-size: .8125rem; */
@@ -24,9 +23,8 @@ user agent stylesheet main {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: Arial, Sans-Serif;
-    background: #4D4D4D;
     padding: 3.375rem;
-    background-image: url(https://lh4.googleusercontent.com/WiSaC8N6xsIv1KSH-kD6EIhwDmKMtciJbvDzv8PRbHVM7tYjbcojtHaREnwn27NN9chmzZa5_fkRnm_znnTtasikF2jyC6cLOBUqa9AVqq-19a_uQB4lTVBf99uYSWe63A=w1280);
+    background-image: url(https://lh3.googleusercontent.com/Nbmr92vyo3Ml4VZ7GRPzQaRjTKHiPtUAo_JZF3mB9AQ4yTX_uJ6gqK6aguwZdvpFOv0VXFTO6e0G8WxzFrFrS2WbHhvyTfSOCDZ4vBcAJv342iXLwsO3yueAs-Iu_9uSPg=w1280);
     background-attachment: fixed;
     background-position: center center;
     background-repeat: no-repeat;
@@ -34,7 +32,7 @@ user agent stylesheet main {
 
 html {
     font-size: 100%;
-    background: #262626;
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../../other/background/719647.jpg");
     color: #fff;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;

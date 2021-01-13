@@ -8,21 +8,26 @@ $(function() {
 
 
 
-/*
-function filterSettingChecked() {
 
-    var filters = document.getElementById("myBtnContainer");
-    var overall = document.querySelector('input[id="search_bar_form_filters"]');
+$('document').ready(function() {
 
-    if (overall.checked) {
-        filters.style.display = 'flex';
-        filters.style.flex = 'nowrap';
-    } else {
-        filters.style.display = 'none';
+    var coll = document.getElementsByClassName("collap");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
     }
+});
 
-}
-*/
+
 
 
 function w3AddClass(element, name) {
