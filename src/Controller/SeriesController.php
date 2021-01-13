@@ -53,7 +53,7 @@ class SeriesController extends AbstractController
     }
 
     /**
-     * inject securty service
+     * inject security service
      * @var Security
      */
     private $security;
