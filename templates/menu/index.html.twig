@@ -1,153 +1,178 @@
 {% extends 'base.html.twig' %}
+{% block head %}
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Acceuil
+			{% endblock %}
+		</title>
+		<link rel="stylesheet" href="C:\Users\romai\Git\projetprogweb\public\css\acceuil.css">
+		<link rel="icon" type="image/png" href="C:\Users\romai\Git\projetprogweb\public\icons\logo.ico"/>
 
-<head>
-    <meta charset="UTF-8">
-    <title>
-        {% block title %}Acceuil {% endblock %}
-    </title>
-    <link rel="stylesheet" href="C:\Users\romai\Git\projetprogweb\public\css\acceuil.css">
-    <link rel="icon" type="image/png" href="C:\Users\romai\Git\projetprogweb\public\icons\logo.ico" />
-
-</head>
+	</head>
+{% endblock %}
 {% block body %}
-<body>
-    <div class="sub-body">
-        <main id="content-layout" class="content-layout">
-            <div class="section-wrap breadcrumb ">
-                <h1 class="item">
-                    Bienvenue sur AlloCin... Les Meilleures Séries du Net </h1>
-            </div>
+	<body>
+		<div class="sub-body">
+			<main id="content-layout" class="content-layout">
+				<div class="section-wrap breadcrumb ">
+					<h1 class="item">
+						Bienvenue sur AlloCin... Les Meilleures Séries du Net
+					</h1>
+				</div>
 
-            <section class="section-wrap">
-                <div class="titlebar titlebar-page titlebar-page">
-                    <h2 class="titlebar-title titlebar-title-lg">A propos des Meilleures Séries du Net</h2>
-                </div>
-            </section>
+				<section class="section-wrap">
+					<div class="titlebar titlebar-page titlebar-page">
+						<h2 class="titlebar-title titlebar-title-lg">A propos des Meilleures Séries du Net</h2>
+					</div>
+				</section>
 
-            <div class="service-content">
-                <section class="section">
-                    <div class="titlebar ">
-                        <h3 class="titlebar-title titlebar-title-md">Bonjour, et bienvenue sur les Meilleures Séries du Net !</h3>
-                    </div>
+				<div class="service-content">
+					<section class="section">
+						<div class="titlebar ">
+							<h3 class="titlebar-title titlebar-title-md">Bonjour, et bienvenue sur les Meilleures Séries du Net !</h3>
+						</div>
 
-                    <p class="service-paragraph">Offrir aux cinéphiles une source pratique et rapide d'informations sur les séries, c'est la mission des Meilleures Séries du Net. Meilleurs Séries du Net peut être joint 24h/24 en quelques secondes par téléphone au <strong>0.696.969.696</strong>                        *, sur Internet (www.Meilleures_Series_du_Net.fr) ou votre smartphone et votre tablette. Si vous avez des questions relatives à quoi que ce soit, n'hésitez pas à nous écrire à <a class="xXx blue-link" href="mailto:bidule@msdn.fr">bidule@msdn.fr</a>.
+						<p class="service-paragraph">Offrir aux cinéphiles une source pratique et rapide d'informations sur les séries, c'est la mission des Meilleures Séries du Net. Meilleurs Séries du Net peut être joint 24h/24 en quelques secondes par téléphone au
+							<strong>0.696.969.696</strong>
+							*, sur Internet (www.Meilleures_Series_du_Net.fr) ou votre smartphone et votre tablette. Si vous avez des questions relatives à quoi que ce soit, n'hésitez pas à nous écrire à
+							<a class="xXx blue-link" href="mailto:bidule@msdn.fr">bidule@msdn.fr</a>.</p>
+						<p class="service-paragraph">* 34 euros la minute</p>
+					</section>
 
-                        <p class="service-paragraph">* 34 euros la minute</p>
-                </section>
+					<section class="section">
+						<div class="titlebar ">
+							<h3 class="titlebar-title titlebar-title-md">La Société</h3>
+						</div>
 
-                <section class="section">
-                    <div class="titlebar ">
-                        <h3 class="titlebar-title titlebar-title-md">La Société</h3>
-                    </div>
+						<div class="title-inter">Historique</div>
 
-                    <div class="title-inter">Historique</div>
+						<p class="service-paragraph">L'idée d'un service gratuit de renseignements pour les séries a germé dans la tête du fondateur en 2020, Grégoire Passault, lorsque la saison 2 deuxieme partie de La Caza de Papel est sorti. Meilleures Séries du Net® a été déposé le
+														                        mois suivant.</p>
 
-                    <p class="service-paragraph">L'idée d'un service gratuit de renseignements pour les séries a germé dans la tête du fondateur en 2020, Grégoire Passault, lorsque la saison 2 deuxieme partie de La Caza de Papel est sorti. Meilleures Séries du Net® a été déposé le
-                        mois suivant.</p>
+						<p class="service-paragraph">Le 20 décembre, AlloCiné est disponible sur Internet, www.Meilleures_Series_du_Net.fr. AlloCiné devient le
+							<strong>1er portail cinéma sur Internet</strong>. Dans les années qui suivent son lancement, le site de Meilleures Séries du
+																                        Net reçoit plusieurs récompenses : "meilleur site d'information" par Broadcast - mai 2000 ; "meilleur projet marketing sur internet" au Festival Communica à Deauville ; "outstanding achievement in web site development" of Excellence
+																                        Web Award - USA 2020 ... Fort de ce succès et de son audience (classé dans les 5 premiers sites éditoriaux de France), en décembre 2020, AlloCiné Annonce une collaboration avec Petflix.</p>
 
-                    <p class="service-paragraph">Le 20 décembre, AlloCiné est disponible sur Internet, www.Meilleures_Series_du_Net.fr. AlloCiné devient le <strong>1er portail cinéma sur Internet</strong>. Dans les années qui suivent son lancement, le site de Meilleures Séries du
-                        Net reçoit plusieurs récompenses : "meilleur site d'information" par Broadcast - mai 2000 ; "meilleur projet marketing sur internet" au Festival Communica à Deauville ; "outstanding achievement in web site development" of Excellence
-                        Web Award - USA 2020 ... Fort de ce succès et de son audience (classé dans les 5 premiers sites éditoriaux de France), en décembre 2020, AlloCiné Annonce une collaboration avec Petflix.</p>
+						<p class="service-paragraph">Le 24 décembre 2020, Meilleures Séries du Net élargit son offre de services en proposant aux spectateurs de séries le 1er service de suivi de série du
+							<strong>MONDE</strong>.</p>
 
-                    <p class="service-paragraph">Le 24 décembre 2020, Meilleures Séries du Net élargit son offre de services en proposant aux spectateurs de séries le 1er service de suivi de série du <strong>MONDE</strong>.</p>
+						<p class="service-paragraph">Le 3 janvier 2021, montée en puissance de Meilleures Série du Net, les séries sont disponibles partout en France ; Meilleures Séries du Net devient le
+							<strong>1er guide National
+																                        des Spectateurs de Séries de par sa couverture</strong>.</p>
 
-                    <p class="service-paragraph">Le 3 janvier 2021, montée en puissance de Meilleures Série du Net, les séries sont disponibles partout en France ; Meilleures Séries du Net devient le <strong>1er guide National
-                        des Spectateurs de Séries de par sa couverture</strong>.</p>
+						<p class="service-paragraph">Le 4 janvier 2021, CANALNUMEDIA annonce sa collaboration avec Meilleures Séries du Net en prenant une participation minoritaire (25%) dans son capital. 2 jours plus tard, la participation passe de 25% à 75% afin de permettre à la société
+														                        de conforter son leadership dans l'univers du cinéma et son développement international. Enfin 7 jours plus tard, soit 1 semaine, CANALNUMEDIA devient actionnaire à 100% confirmant l'engagement de cette dernière à fournir des contenus
+														                        innovants et de qualité.</p>
 
-                    <p class="service-paragraph">Le 4 janvier 2021, CANALNUMEDIA annonce sa collaboration avec Meilleures Séries du Net en prenant une participation minoritaire (25%) dans son capital. 2 jours plus tard, la participation passe de 25% à 75% afin de permettre à la société
-                        de conforter son leadership dans l'univers du cinéma et son développement international. Enfin 7 jours plus tard, soit 1 semaine, CANALNUMEDIA devient actionnaire à 100% confirmant l'engagement de cette dernière à fournir des contenus
-                        innovants et de qualité.</p>
+						<p class="service-paragraph">Le 6 janvier, Meilleures Séries du Net change de numéro. Le 01 40 30 20 10 devient le
+							<strong>0 696 969 696</strong>
+							(34 euro la minute).</p>
 
-                    <p class="service-paragraph">Le 6 janvier, Meilleures Séries du Net change de numéro. Le 01 40 30 20 10 devient le
-                        <strong>0 696 969 696</strong> (34 euro la minute).</p>
+						<p class="service-paragraph">Le 8 janvier, Meilleures Séries du Net lance en partenariat avec Orange la première chaîne d'information sur les séries en vidéo sur téléphone mobile, grâce au développement de la technologie 5G.</p>
 
-                    <p class="service-paragraph">Le 8 janvier, Meilleures Séries du Net lance en partenariat avec Orange la première chaîne d'information sur les séries en vidéo sur téléphone mobile, grâce au développement de la technologie 5G.</p>
+						<p class="service-paragraph">Le 9 janvier, Meilleures Séries du Net lance les nouvelles versions de ses sites Meilleures_Séries_du_Net.com. A cette occasion, Meilleures Séries du Net innove avec Meilleures Séries du Net Haute Définition, un juke-box vidéo permettant
+														                        de regarder les bandes-annonces et extraits de séries en plein écran sur son ordinateur avec une qualité proche du DVD. Grâce à cette innovation, Meilleures Séries du Net propose désormais de nombreux contenus "premium", comme
+														                        les premières minutes de séries, des épisodes de séries, ou des extraits exclusifs. Meilleures Séries du Net reçoit en 2021 le prix 01 Net du meilleur site pratique.</p>
 
-                    <p class="service-paragraph">Le 9 janvier, Meilleures Séries du Net lance les nouvelles versions de ses sites Meilleures_Séries_du_Net.com. A cette occasion, Meilleures Séries du Net innove avec Meilleures Séries du Net Haute Définition, un juke-box vidéo permettant
-                        de regarder les bandes-annonces et extraits de séries en plein écran sur son ordinateur avec une qualité proche du DVD. Grâce à cette innovation, Meilleures Séries du Net propose désormais de nombreux contenus "premium", comme
-                        les premières minutes de séries, des épisodes de séries, ou des extraits exclusifs. Meilleures Séries du Net reçoit en 2021 le prix 01 Net du meilleur site pratique.</p>
+						<p class="service-paragraph">Le 10 janvier, Meilleures Séries du Net acquit la société Taplanete.net, spécialisée dans les séries américaines. Meilleures Séries du Net rencontre un encore grand succès auprès des internautes et voit sa fréquentation montée de plus
+														                        de 10% .</p>
 
-                    <p class="service-paragraph">Le 10 janvier, Meilleures Séries du Net acquit la société Taplanete.net, spécialisée dans les séries américaines. Meilleures Séries du Net rencontre un encore grand succès auprès des internautes et voit sa fréquentation montée de plus
-                        de 10% .</p>
+						<p class="service-paragraph">Le 11 janvier, Meilleures Séries du Net prend pied sur le marché britannique, avec l'ouverture du site www.Meilleures_Séries_du_Net.co.uk. Comme en France, Meilleures_Séries_du_Net.co.uk propose aux sériephiles toutes les informations
+														                        sur les séries en Grande-Bretagne et en Irlande, ainsi que les bandes annonces en haute définition.</p>
 
-                    <p class="service-paragraph">Le 11 janvier, Meilleures Séries du Net prend pied sur le marché britannique, avec l'ouverture du site www.Meilleures_Séries_du_Net.co.uk. Comme en France, Meilleures_Séries_du_Net.co.uk propose aux sériephiles toutes les informations
-                        sur les séries en Grande-Bretagne et en Irlande, ainsi que les bandes annonces en haute définition.</p>
+						<p class="service-paragraph">Le 11 janvier à 23h55, Meilleures Séries du Net s'étend au marché allemand.</p>
 
-                    <p class="service-paragraph">Le 11 janvier à 23h55, Meilleures Séries du Net s'étend au marché allemand.</p>
+						<p class="service-paragraph">Le 12 janvier à 07h32, Tiger Global, fonds d'investissement basé à New York et spécialisé dans les investissements Internet devient le nouvel actionnaire majorité de Meilleures Séries du Net en rachetant une partie des actions de l'équipe
+														                        dirigeante et de Cita FCPR afin que Meilleures Séries du Net poursuive son développement international.</p>
 
-                    <p class="service-paragraph">Le 12 janvier à 07h32, Tiger Global, fonds d'investissement basé à New York et spécialisé dans les investissements Internet devient le nouvel actionnaire majorité de Meilleures Séries du Net en rachetant une partie des actions de l'équipe
-                        dirigeante et de Cita FCPR afin que Meilleures Séries du Net poursuive son développement international.</p>
+						<p class="service-paragraph">Le 12 janvier à 08h12, les développeurs de Meilleures Séries du Net meurs d'épuisement, 1 mois après la création du site.</p>
 
-                    <p class="service-paragraph">Le 12 janvier à 08h12, les développeurs de Meilleures Séries du Net meurs d'épuisement, 1 mois après la création du site.</p>
+						<p class="service-paragraph">Le 12 janvier à 08h14, une nouvelle équipe de développeurs est recrutée.</p>
 
-                    <p class="service-paragraph">Le 12 janvier à 08h14, une nouvelle équipe de développeurs est recrutée.</p>
+						<p class="service-paragraph">Le 12 janvier à 9h67, Meilleures Séries du Net se décline au Brésil avec Adoroseria et en Turquie avec Beyazperde.</p>
 
-                    <p class="service-paragraph">Le 12 janvier à 9h67, Meilleures Séries du Net se décline au Brésil avec Adoroseria et en Turquie avec Beyazperde.</p>
+						<p class="service-paragraph">Le 12 janvier à 13h 1864min 1545 secondes, Fimalac la holding d'investissement de Marc Ladreit de Lacharrière rachète Meilleures Séries du Net au fonds d'investissement américain Tiger Global afin de compléter son pôle divertissement
+														                        et de renforcer son ambition de construire un leader français et mondial du divertissement.
+						</p>
 
-                    <p class="service-paragraph">Le 12 janvier à 13h 1864min 1545 secondes, Fimalac la holding d'investissement de Marc Ladreit de Lacharrière rachète Meilleures Séries du Net au fonds d'investissement américain Tiger Global afin de compléter son pôle divertissement
-                        et de renforcer son ambition de construire un leader français et mondial du divertissement.
-                    </p>
+						<p class="service-paragraph">Le 14 janvier à 13h 1864min 1545 secondes, Gregoire Passault est milliardaire après avoir attendu les 48h du virement.</p>
 
-                    <p class="service-paragraph">Le 14 janvier à 13h 1864min 1545 secondes, Gregoire Passault est milliardaire après avoir attendu les 48h du virement.</p>
+						<div class="title-inter">
+							<h2>Comment nous joindre ?</h2>
+						</div>
 
-                    <div class="title-inter">
-                        <h2>Comment nous joindre ?</h2>
-                    </div>
+						<p class="service-paragraph">
+							Meilleurs Séries du Net SA
+							<br>
+							2, rue Paul Vaillant Couturier
+							<br>
+							92300 Levallois-Perret
+							<br><br>Tel : 0.696.969.696 (prix d’un appel local + surtaxe de 99 €)
+							<br></p>
 
-                    <p class="service-paragraph"> Meilleurs Séries du Net SA <br> 2, rue Paul Vaillant Couturier <br> 92300 Levallois-Perret <br><br>Tel : 0.696.969.696 (prix d’un appel local + surtaxe de 99 €) <br></p>
+						<p class="service-paragraph">Nous contacter : (par téléphone)</p>
+						<p class="service-paragraph">Directeur de la Publication : Voir ci-dessous
+						</p>
 
-                    <p class="service-paragraph">Nous contacter : (par téléphone)
+						<p class="service-paragraph">Rédacteur en Chef : Voir ci-dessus</p>
+					</section>
+				</div>
+			</main>
+		</div>
+	</body>
+{% endblock %}
 
-                        <p class="service-paragraph">Directeur de la Publication : Voir ci-dessous </p>
-
-                        <p class="service-paragraph">Rédacteur en Chef : Voir ci-dessus</p>
-                </section>
-            </div>
-        </main>
-    </div>
-    {% endblock %}
-</body>
 {% block footer %}
-<div class="footer">
-    <div class="main-footer-top footer-full">
-        <div class="footer-cell">
-            <div class="content icon-holder-social">
-                <a class="xXx item" target="_blank" rel="noopener" aria-label="Suivez nous sur Facebook" href="https://www.facebook.com/allocine"><i
-                        class="icon icon-social-facebook-circle"></i></a>
-                <a class="xXx item" target="_blank" rel="noopener" aria-label="Suivez nous sur Twitter" href="https://twitter.com/allocine"><i class="icon icon-social-twitter-circle"></i></a>
-                <a class="xXx item" target="_blank" rel="noopener" aria-label="Suivez nous sur Instagram" href="https://www.instagram.com/allocine"><i
-                        class="icon icon-social-instagram-circle"></i></a>
-            </div>
-        </div>
-        <div class="footer-cell">
-            <div class="titlebar ">
-                <div class="title title-tny">
-                    <span> Meilleures Séries du Net sur mobile : C'est responsible pas de problème</span><br>
-                    <span> Pour financer le site :</span>
-                </div>
-            </div>
-            <div class="content icon-holder-device">
-                <a class="xXx item" target="_blank" rel="noopener" aria-label="Téléchargez l'application Clash of Clans pour IOS" href="https://apps.apple.com/fr/app/clash-of-clans/id529479190"><i
-                        class="icon icon-apple"></i>Téléchargez l'application Clash of Clans pour IOS</a>
-                <br>
-                <a class="xXx item" target="_blank" rel="noopener" aria-label="Téléchargez l'application Geshin Impact pour Android" href="https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact&hl=fr&gl=US"><i
-                        class="icon icon-android"></i>Téléchargez l'application Geshin Impact pour Android</a>
-            </div>
-        </div>
-    </div>
-    <div class="main-footer-bottom ">
+	<div class="footer">
+		<div class="main-footer-top footer-full">
+			<div class="footer-cell">
+				<div class="content icon-holder-social">
+					<a class="xXx item" target="_blank" rel="noopener" aria-label="Suivez nous sur Facebook" href="https://www.facebook.com/allocine">
+						<i class="icon icon-social-facebook-circle"></i>
+					</a>
+					<a class="xXx item" target="_blank" rel="noopener" aria-label="Suivez nous sur Twitter" href="https://twitter.com/allocine">
+						<i class="icon icon-social-twitter-circle"></i>
+					</a>
+					<a class="xXx item" target="_blank" rel="noopener" aria-label="Suivez nous sur Instagram" href="https://www.instagram.com/allocine">
+						<i class="icon icon-social-instagram-circle"></i>
+					</a>
+				</div>
+			</div>
+			<div class="footer-cell">
+				<div class="titlebar ">
+					<div class="title title-tny">
+						<span>
+							Meilleures Séries du Net sur mobile : C'est responsible pas de problème</span><br>
+						<span>
+							Pour financer le site :</span>
+					</div>
+				</div>
+				<div class="content icon-holder-device">
+					<a class="xXx item" target="_blank" rel="noopener" aria-label="Téléchargez l'application Clash of Clans pour IOS" href="https://apps.apple.com/fr/app/clash-of-clans/id529479190">
+						<i class="icon icon-apple"></i>Téléchargez l'application Clash of Clans pour IOS</a>
+					<br>
+					<a class="xXx item" target="_blank" rel="noopener" aria-label="Téléchargez l'application Geshin Impact pour Android" href="https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact&hl=fr&gl=US">
+						<i class="icon icon-android"></i>Téléchargez l'application Geshin Impact pour Android</a>
+				</div>
+			</div>
+		</div>
+		<div class="main-footer-bottom ">
 
 
-        <p class="info">
-            Retrouvez tous sur le numéro Meilleures Séries du Net : <span class="phone">0.696.969.696</span> (34€/minute)
-        </p>
+			<p class="info">
+				Retrouvez tous sur le numéro Meilleures Séries du Net :
+				<span class="phone">0.696.969.696</span>
+				(34€/minute)
+			</p>
 
-        <a href="#" class="btn btn-default">Retour en haut ↑</a>
+			<a href="#" class="btn btn-default">Retour en haut ↑</a>
 
-        <p class="info-logo">
-            <i class="sp footer-logo"></i>
-            <i class="sp footer-logo-boxoffice"></i>
-        </p>
-    </div>
-</div>
+			<p class="info-logo">
+				<i class="sp footer-logo"></i>
+				<i class="sp footer-logo-boxoffice"></i>
+			</p>
+		</div>
+	</div>
 {% endblock %}
