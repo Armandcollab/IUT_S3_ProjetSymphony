@@ -26,6 +26,10 @@ user agent stylesheet main {
     font-family: Arial, Sans-Serif;
     background: #4D4D4D;
     padding: 3.375rem;
+    background-image: url(https://lh4.googleusercontent.com/WiSaC8N6xsIv1KSH-kD6EIhwDmKMtciJbvDzv8PRbHVM7tYjbcojtHaREnwn27NN9chmzZa5_fkRnm_znnTtasikF2jyC6cLOBUqa9AVqq-19a_uQB4lTVBf99uYSWe63A=w1280);
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 html {
